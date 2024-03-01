@@ -17,7 +17,7 @@ def user_profile(request):
 
     # expenses = ExpensesTracking.objects.filter(author=user).all()
     # earnings = EarningsTracking.objects.filer(author=user).all()
-    finantial_status = FinantialStatus.objects.filter(author=user).all()
+    finantial_status = FinantialStatus.objects.filter(user=user).all()
 
     context = {
         # 'expenses':expenses,
@@ -25,7 +25,7 @@ def user_profile(request):
         'finantial_status':finantial_status
     }
 
-    return render(request, 'accounts/profile_data.html', context) #Simple version. For visual overhaul go to dashboard
+    return render(request, 'accounts/profile_details.html', context) #Simple version. For visual overhaul go to dashboard
 
 def register_user(request):
     form = UserRegistrationForm() #TODO

@@ -2,7 +2,7 @@
 
 {% block content %}
   <div class="container mt-5">
-    <h2>Your Financial Status</h2>
+    <h2>Your Account Balance</h2>
     <table class="table">
       <thead>
         <tr>
@@ -19,5 +19,12 @@
         {% endfor %}
       </tbody>
     </table>
+
+    <h2>Add New Financial Status</h2>
+    <form method="post" action="{% url 'add_new_finantial_status' %}">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn btn-primary">Add Financial Status</button>
+    </form>
   </div>
 {% endblock %}
