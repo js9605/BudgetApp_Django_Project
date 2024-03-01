@@ -1,0 +1,25 @@
+BudgetApp_Django_Project/
+|-- accounts/
+|   |-- __init__.py
+|   |-- admin.py
+|   |-- models.py
+|   |-- apps.py
+|   |-- tests.py
+|   |-- views.py
+|-- BudgetApp_Django_Project/
+|   |-- __init__.py
+|   |-- asgi.py
+|   |-- settings.py
+|   |-- urls.py
+|   |-- wsgi.py
+|-- accounts/
+|   |-- accounts/
+|   |   |-- profile_details.html
+|   |   |-- register_user.html
+|   |-- base.html
+|-- static/
+|-- venv/
+|-- gitignore
+|-- db.sqlite3
+|-- manage.py
+|-- requirements
