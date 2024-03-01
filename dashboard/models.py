@@ -17,7 +17,7 @@ class Dashboard(models.Model):
             {'category': finantial_status.category.name, 'amount': finantial_status.amount}
             for finantial_status in finantial_statuses
         ]
-        
+
         return finantial_status_data
     
     # def get_expense_tracking_data(self):
