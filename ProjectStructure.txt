@@ -6,13 +6,17 @@ BudgetApp_Django_Project/
 |   |-- apps.py
 |   |-- tests.py
 |   |-- views.py
+|-- dashboard/
+|-- earnings_tracking/
+|-- expenses_tracking/
+|-- finantial_status/
 |-- BudgetApp_Django_Project/
 |   |-- __init__.py
 |   |-- asgi.py
 |   |-- settings.py
 |   |-- urls.py
 |   |-- wsgi.py
-|-- accounts/
+|-- templates/
 |   |-- accounts/
 |   |   |-- profile_details.html
 |   |   |-- register_user.html
