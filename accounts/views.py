@@ -4,9 +4,9 @@ from django.urls import reverse
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
 
-from expenses_tracking.models import ExpensesTracking #TODO
+# from expenses_tracking.models import ExpensesTracking #TODO
 # from earnings_tracking.models import EarningsTracking #TODO
-# from finantial_status.models import FinantialStatus #TODO
+from finantial_status.models import FinantialStatus #TODO
 from .forms import UserRegistrationForm
 
 
@@ -15,14 +15,14 @@ from .forms import UserRegistrationForm
 def user_profile(request):
     user = request.user
 
-    expenses = ExpensesTracking.objects.filter(author=user).all()
+    # expenses = ExpensesTracking.objects.filter(author=user).all()
     # earnings = EarningsTracking.objects.filer(author=user).all()
-    # finantial_status = FinantialStatus.objects.filter(author=user).all()
+    finantial_status = FinantialStatus.objects.filter(author=user).all()
 
     context = {
-        'expenses':expenses,
+        # 'expenses':expenses,
         # 'earnings':earnings,
-        # 'finantial_status':finantial_status
+        'finantial_status':finantial_status
     }
 
     return render(request, 'accounts/profile_data.html', context) #Simple version. For visual overhaul go to dashboard
