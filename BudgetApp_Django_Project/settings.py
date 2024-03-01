@@ -39,13 +39,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'crispy_forms',
     
     'accounts',
+    'dashboard',
+    'earnings_tracking',
+    'expenses_tracking',
+    'finantial_status',
+
     # 'allauth',
     # 'allauth.account',
     # 'allauth.socialaccount',
     # 'allauth.socialaccount.providers.google',
-    'crispy_forms',
 ]
 
 MIDDLEWARE = [
