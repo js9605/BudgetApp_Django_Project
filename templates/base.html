@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Link to Bootstrap CSS file -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    
+    {% if title %}
+        <title>Budget App {{title}}</title>
+    {% else %}
+        <title>Budget App</title>
+    {% endif %}
+</head>
+<body>
+    <header>
+        {% if user.is_authenticated  %}
+            <a href="{% url 'logout_page' %}">Logout</a>
+        {% else %}
+            <a href="{% url 'signup_page' %}">Sign Up</a>
+            <a href="{% url 'login_page' %}">Login</a>
+        {% endif %}
+    </header>
+    {% block content %}
+    {% endblock content %}
+    
+    <!-- Bootstrap JavaScript files (optional) -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Your custom styles or additional scripts go here -->
+    
+    <footer>
+        &copy; Budget App {% now "Y" %}
+    </footer>
+</body>
+</html>
