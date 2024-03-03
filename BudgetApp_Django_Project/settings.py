@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'dashboard',
     'earnings_tracking',
     'expenses_tracking',
-    'finantial_status',
+    'financial_status',
 
     # 'allauth',
     # 'allauth.account',

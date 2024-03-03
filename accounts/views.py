@@ -6,23 +6,23 @@ from django.contrib.auth import authenticate, login, logout
 
 # from expenses_tracking.models import ExpensesTracking #TODO
 # from earnings_tracking.models import EarningsTracking #TODO
-from finantial_status.models import FinantialStatus #TODO
+from financial_status.models import FinancialStatus #TODO
 from .forms import UserRegistrationForm
 
 
-#TODO First create apps for ExpenseTracking, EarningsTracking, FinantialStatus
+#TODO First create apps for ExpenseTracking, EarningsTracking, FinancialStatus
 @login_required
 def user_profile(request):
     user = request.user
 
     # expenses = ExpensesTracking.objects.filter(author=user).all()
     # earnings = EarningsTracking.objects.filer(author=user).all()
-    finantial_status = FinantialStatus.objects.filter(user=user).all()
+    financial_status = FinancialStatus.objects.filter(user=user).all()
 
     context = {
         # 'expenses':expenses,
         # 'earnings':earnings,
-        'finantial_status':finantial_status
+        'financial_status':financial_status
     }
 
     return render(request, 'accounts/profile_details.html', context) #Simple version. For visual overhaul go to dashboard
