@@ -9,7 +9,7 @@ BudgetApp_Django_Project/
 |-- dashboard/
 |-- earnings_tracking/
 |-- expenses_tracking/
-|-- finantial_status/
+|-- financial_status/
 |-- BudgetApp_Django_Project/
 |   |-- __init__.py
 |   |-- asgi.py

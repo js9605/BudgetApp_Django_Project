@@ -1,12 +1,12 @@
 from django import forms
 
-from .models import FinantialStatus
+from .models import FinancialStatus
 
 
 
 class FinancialStatusForm(forms.ModelForm):
     class Meta:
-        model = FinantialStatus
+        model = FinancialStatus
         fields = [
             'amount',
             'category',

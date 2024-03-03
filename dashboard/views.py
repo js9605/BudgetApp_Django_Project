@@ -1,34 +1,28 @@
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
 
 from .models import Dashboard
-from finantial_status.forms import FinancialStatusForm # TODO
+from financial_status.forms import FinancialStatusForm
+from financial_status.models import FinancialStatus
 
 
 def dashboard(request):
     user_dashboard, created = Dashboard.objects.get_or_create(user=request.user)
 
-    finantial_status_data = user_dashboard.get_finantial_status()
+    financial_status_data = user_dashboard.get_financial_status()
 
     form = FinancialStatusForm()
 
-    """
-    The context containing both 'finantial_status_data' and 'form' is 
-    necessary because it allows you to display the existing data and provide
-    a form for users to add new entries on the same dashboard page. 
-    The existing data ('finantial_status_data') is displayed, and the form ('form') 
-    is used to gather new data from the user.
-    """
-
     context = {
-        'finantial_status_data': finantial_status_data,
+        'financial_status_data': financial_status_data,
         'form': form,
     }
 
     return render(request, 'data_visualisation/dashboard.html', context)
 
 
-def add_new_finantial_status(request):
+def add_new_financial_status(request):
     if request.method == 'POST':
         form = FinancialStatusForm(request.POST)
 
@@ -44,6 +38,5 @@ def add_new_finantial_status(request):
     context = {'form':form}
     return(render(request, 'data_visualisation/dashboard.html', context))
 
-
-def edit_finantial_status(request):
+def edit_financial_status(request, financial_status_id):
     pass

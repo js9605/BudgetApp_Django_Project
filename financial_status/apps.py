@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class FinantialStatusConfig(AppConfig):
+class FinancialStatusConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'finantial_status'
+    name = 'financial_status'

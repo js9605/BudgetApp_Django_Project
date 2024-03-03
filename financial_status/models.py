@@ -13,7 +13,7 @@ class Category(models.Model):
     
 
 User = get_user_model()
-class FinantialStatus(models.Model):
+class FinancialStatus(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00'))
     category = models.ForeignKey(Category, on_delete=models.CASCADE) # (e.g., bank accounts, cash)
@@ -25,7 +25,7 @@ class FinantialStatus(models.Model):
 
 @receiver(post_migrate)
 def create_initial_categories(sender, **kwargs):
-    if sender.name == 'finantial_status':
+    if sender.name == 'financial_status':
         categories = ['Bank Accounts', 'Cash', 'Investments', 'Other']
 
         for category_name in categories:
