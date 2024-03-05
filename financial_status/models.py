@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from decimal import Decimal
 from django.db.models.signals import post_migrate
 from django.dispatch import receiver
+from simple_history.models import HistoricalRecords
 
 
 class Category(models.Model):
@@ -19,6 +20,11 @@ class FinancialStatus(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE) # (e.g., bank accounts, cash)
     date = models.DateField(auto_now_add=True)
 
+    history = HistoricalRecords()
+    # historical_records = financial_status.history.all() # Access
+    # Retrieve historical records for the specific category
+    # historical_records_for_category = financial_status.history.filter(category=category)
+
     def __str__(self):
         return f"{self.user.username}'s Financial Status"
 
@@ -30,3 +36,6 @@ def create_initial_categories(sender, **kwargs):
 
         for category_name in categories:
             Category.objects.get_or_create(name=category_name)
+
+
+   

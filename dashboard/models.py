@@ -14,7 +14,7 @@ class Dashboard(models.Model):
 
         financial_statuses = FinancialStatus.objects.filter()
         financial_status_data = [
-            {'category': financial_status.category.name, 'amount': financial_status.amount}
+            {'id': financial_status.id,'category': financial_status.category.name, 'amount': financial_status.amount}
             for financial_status in financial_statuses
         ]
 
