@@ -6,11 +6,10 @@ from django.contrib.auth import authenticate, login, logout
 
 # from expenses_tracking.models import ExpensesTracking #TODO
 # from earnings_tracking.models import EarningsTracking #TODO
-from financial_status.models import FinancialStatus #TODO
+from financial_status.models import FinancialStatus
 from .forms import UserRegistrationForm
 
 
-#TODO First create apps for ExpenseTracking, EarningsTracking, FinancialStatus
 @login_required
 def user_profile(request):
     user = request.user
