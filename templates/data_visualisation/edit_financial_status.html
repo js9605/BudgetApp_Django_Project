@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h2>Your Account Balance</h2>
+    <table class="table">
+    </table>
+
+    <h2>Add New Financial Status</h2>
+
+    <p>{{ financial_status_id }}</p>
+
+    <form method="post" action="{% url 'edit_financial_status' financial_status_id=financial_status_id %}">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn btn-primary">
+        {% if edit_mode %}
+          Save Changes
+        {% else %}
+          Add Financial Status
+        {% endif %}
+      </button>
+    </form>
+
+    {% if edit_mode %}
+      <a href="{% url 'dashboard' %}" class="btn btn-secondary">Back to Dashboard</a>
+    {% endif %}
+  </div>
+{% endblock %}

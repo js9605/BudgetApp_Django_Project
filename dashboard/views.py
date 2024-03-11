@@ -13,7 +13,6 @@ def dashboard(request):
     user_dashboard, created = Dashboard.objects.get_or_create(user=request.user)
 
     financial_status_data = user_dashboard.get_financial_status()
-
     edit_urls = generate_urls(financial_status_data, 'edit_financial_status')
 
     print(f'Edit urls: {edit_urls}')
@@ -23,6 +22,7 @@ def dashboard(request):
     context = {
         'financial_status_data': zip(financial_status_data, edit_urls),
         'form': form,
+        'edit_mode': False,
     }
 
     return render(request, 'data_visualisation/dashboard.html', context)
@@ -37,6 +37,8 @@ def add_new_financial_status(request):
             financial_status.user = request.user
             financial_status.save()
 
+            print("DEBUG: add_new_financial_status")
+
             return(redirect('dashboard'))
     else:
         form = FinancialStatusForm()
@@ -45,6 +47,8 @@ def add_new_financial_status(request):
     return(render(request, 'data_visualisation/dashboard.html', context))
 
 def edit_financial_status(request, financial_status_id):
+    print('DEBUG financial_status_id: ', financial_status_id)
+
     financial_status = get_object_or_404(FinancialStatus, id=financial_status_id, user=request.user)
 
     if request.method == 'POST':
