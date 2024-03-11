@@ -16,8 +16,6 @@ def dashboard(request):
     last_financial_status_entries = user_dashboard.get_latest_financial_status()
     edit_urls = generate_urls(last_financial_status_entries, 'edit_financial_status')
 
-    print(f'Edit urls: {edit_urls}')
-
     form = FinancialStatusForm()
 
     context = {
@@ -38,8 +36,6 @@ def add_new_financial_status(request):
             financial_status.user = request.user
             financial_status.save()
 
-            print("DEBUG: add_new_financial_status")
-
             return(redirect('dashboard'))
     else:
         form = FinancialStatusForm()
@@ -48,7 +44,6 @@ def add_new_financial_status(request):
     return(render(request, 'data_visualisation/dashboard.html', context))
 
 def edit_financial_status(request, financial_status_id):
-    print('DEBUG financial_status_id: ', financial_status_id)
 
     financial_status = get_object_or_404(FinancialStatus, id=financial_status_id, user=request.user)
 
@@ -71,8 +66,6 @@ def edit_financial_status(request, financial_status_id):
         form = FinancialStatusForm()
         # print(form.instance)
     
-    print("DEBUG: YOURE HERE, CHECK edit_mode")
-
     context = {
         'form':form,
         'edit_mode':True,

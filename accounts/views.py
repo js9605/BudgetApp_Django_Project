@@ -38,8 +38,7 @@ def register_user(request):
             return redirect(reverse('login_page'))
         
         else:
-            print('Form is invalid for: register_user()')
-            print(form.errors)
+            print(f"Form errors(register_user): {form.errors}")
 
     context = {'form': form}
     return render(request, 'accounts/register_user.html', context)
@@ -49,7 +48,6 @@ def login_user(request):
 
     if request.method == 'POST':
         form = AuthenticationForm(request, request.POST)
-        print("Log: request.method == 'POST")
 
         if form.is_valid():
             print("Log: form.is_valid")
@@ -64,8 +62,7 @@ def login_user(request):
 
                 login(request, user)
 
-                print('Here should redirect to dashboard (TODO)')
-                # return redirect(reverse('dashboard')) #todo
+                return redirect(reverse('dashboard'))
             else:
                 print("Log: user is None")
 

@@ -20,8 +20,6 @@ class Dashboard(models.Model):
             for financial_status in financial_statuses
         ]
 
-        print(f"DEBUG: financial_status_data inside DashboardModel: {financial_status_data}")
-
         return financial_status_data
     
     def get_latest_financial_status(self):
@@ -41,8 +39,6 @@ class Dashboard(models.Model):
                     'category': latest_entry.category.name,
                     'amount': latest_entry.amount,
                 })
-
-        print(f"DEBUG: latest_financial_status_data inside DashboardModel: {latest_financial_status_data}")
 
         return latest_financial_status_data
     
