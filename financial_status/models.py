@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.db import models
 from django.contrib.auth import get_user_model
 from decimal import Decimal
@@ -19,11 +20,15 @@ class FinancialStatus(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00'))
     category = models.ForeignKey(Category, on_delete=models.CASCADE) # (e.g., bank accounts, cash)
     date = models.DateField(auto_now_add=True)
+    timestamp = models.DateTimeField(default=datetime.now)
 
     history = HistoricalRecords()
-    # historical_records = financial_status.history.all() # Access
-    # Retrieve historical records for the specific category
-    # historical_records_for_category = financial_status.history.filter(category=category)
+    
+    """
+    historical_records = financial_status.history.all() # Access
+    Retrieve historical records for the specific category
+    historical_records_for_category = financial_status.history.filter(category=category)
+    """
 
     def __str__(self):
         return f"{self.user.username}'s Financial Status"
@@ -36,6 +41,3 @@ def create_initial_categories(sender, **kwargs):
 
         for category_name in categories:
             Category.objects.get_or_create(name=category_name)
-
-
-   
