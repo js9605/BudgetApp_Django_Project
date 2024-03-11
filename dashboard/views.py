@@ -64,8 +64,10 @@ def edit_financial_status(request, financial_status_id):
             print("Form is invalid for edit_financial_status")
             print(form.errors)
     else:
-        form = FinancialStatusForm(instance=financial_status)
-        print(form.instance)
+        form = FinancialStatusForm()
+        # print(form.instance)
+    
+    print("DEBUG: YOURE HERE, CHECK edit_mode")
 
     context = {
         'form':form,
@@ -73,7 +75,7 @@ def edit_financial_status(request, financial_status_id):
         'financial_status_id':financial_status_id
     }
 
-    return render(request, 'data_visualisation/dashboard.html', context)
+    return render(request, 'data_visualisation/edit_financial_status.html', context)
 
 
 # Utils
