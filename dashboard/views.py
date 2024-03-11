@@ -52,6 +52,9 @@ def edit_financial_status(request, financial_status_id):
 
     financial_status = get_object_or_404(FinancialStatus, id=financial_status_id, user=request.user)
 
+    historical_records_for_category = financial_status.history.filter(category=financial_status.category)
+
+
     if request.method == 'POST':
         print("request.method == 'POST' for edit_financial_status")
 
@@ -73,7 +76,8 @@ def edit_financial_status(request, financial_status_id):
     context = {
         'form':form,
         'edit_mode':True,
-        'financial_status_id':financial_status_id
+        'financial_status_id':financial_status_id,
+        'historical_records_for_category': historical_records_for_category,
     }
 
     return render(request, 'data_visualisation/edit_financial_status.html', context)
