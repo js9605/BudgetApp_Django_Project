@@ -25,5 +25,15 @@
     {% if edit_mode %}
       <a href="{% url 'dashboard' %}" class="btn btn-secondary">Back to Dashboard</a>
     {% endif %}
+
+    {% if historical_records_for_category %}
+    <h2>Historical Records for {{ financial_status.category.name }}</h2>
+    <ul>
+      {% for record in historical_records_for_category %}
+        <li>{{ record.timestamp }} - {{ record.amount }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
   </div>
 {% endblock %}
