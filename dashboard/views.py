@@ -13,6 +13,7 @@ def dashboard(request):
     user_dashboard, created = Dashboard.objects.get_or_create(user=request.user)
 
     financial_status_data = user_dashboard.get_financial_status()
+    last_financial_status_entries = user_dashboard.get_latest_financial_status()
     edit_urls = generate_urls(financial_status_data, 'edit_financial_status')
 
     print(f'Edit urls: {edit_urls}')
@@ -20,7 +21,7 @@ def dashboard(request):
     form = FinancialStatusForm()
 
     context = {
-        'financial_status_data': zip(financial_status_data, edit_urls),
+        'financial_status_data': zip(last_financial_status_entries, edit_urls),
         'form': form,
         'edit_mode': False,
     }
