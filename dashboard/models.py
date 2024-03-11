@@ -12,7 +12,6 @@ User = get_user_model()
 class Dashboard(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
-    # Should i change this to extracting only latest entry for each category? 
     def get_financial_status(self):
 
         financial_statuses = FinancialStatus.objects.filter()
@@ -20,6 +19,8 @@ class Dashboard(models.Model):
             {'id': financial_status.id,'category': financial_status.category.name, 'amount': financial_status.amount}
             for financial_status in financial_statuses
         ]
+
+        print(f"DEBUG: financial_status_data inside DashboardModel: {financial_status_data}")
 
         return financial_status_data
     
