@@ -15,14 +15,14 @@ def dashboard(request):
     financial_status_data = user_dashboard.get_financial_status()
     edit_urls = generate_urls(financial_status_data, 'edit_financial_status')
 
-    # print(f'Edit urls: {edit_urls}')
+    print(f'Edit urls: {edit_urls}')
 
     form = FinancialStatusForm()
 
     context = {
         'financial_status_data': zip(financial_status_data, edit_urls),
         'form': form,
-        'edit_urls':edit_urls,
+        'edit_mode': False,
     }
 
     return render(request, 'data_visualisation/dashboard.html', context)
@@ -36,6 +36,8 @@ def add_new_financial_status(request):
             financial_status = form.save(commit=False)
             financial_status.user = request.user
             financial_status.save()
+
+            print("DEBUG: add_new_financial_status")
 
             return(redirect('dashboard'))
     else:

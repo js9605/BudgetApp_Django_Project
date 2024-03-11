@@ -15,6 +15,9 @@
           <tr>
             <td>{{ entry.category }}</td>
             <td>${{ entry.amount }}</td>
+            <td>
+              <a href="{{ edit_url }}" class="btn btn-warning">Edit</a>
+            </td>
           </tr>
         {% endfor %}
       </tbody>
