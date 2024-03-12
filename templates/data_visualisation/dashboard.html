@@ -22,7 +22,7 @@
         {% endfor %}
       </tbody>
     </table>
-    <h2>Add New Financial Status</h2>
+    <h2>Add New Financial Status Category</h2>
     <form method="post" action="{% url 'add_new_financial_status' %}">
       {% csrf_token %}
       {{ form.as_p }}

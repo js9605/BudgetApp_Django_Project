@@ -8,8 +8,6 @@
 
     <h2>Add New Financial Status</h2>
 
-    <p>{{ financial_status_id }}</p>
-
     <form method="post" action="{% url 'edit_financial_status' financial_status_id=financial_status_id %}">
       {% csrf_token %}
       {{ form.as_p }}
