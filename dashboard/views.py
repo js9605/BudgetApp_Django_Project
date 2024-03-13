@@ -34,26 +34,25 @@ def add_new_financial_status(request):
             financial_status = form.save(commit=False)
             financial_status.user = request.user
             
-            # form.cleaned_data['is_created_in_dashboard'] = True
 
 
             # TODO If entry(amount) for category exist, dont add new entry
-            amount_for_category = form.cleaned_data.get('amount') # if i add new entry it will always be != 0
-            category_name = form.cleaned_data.get('category')
-            new_entry = form.cleaned_data.get('is_created_in_dashboard')
+            category = form.cleaned_data.get('category')
+            amount = form.cleaned_data.get('amount')
 
-            print("amount_for_category: ", amount_for_category)
-            print("category_name: ", category_name)
-            print("new_entry: ", new_entry)
-            print("is_created_in_dashboard: ", financial_status.is_created_in_dashboard)
+            entries_exist = FinancialStatus.objects.filter(category=category)
 
+            print("entries_exist: ", entries_exist)
+
+            financial_status.is_created_in_dashboard = entries_exist
 
             if financial_status.is_created_in_dashboard:
                 print("Category exists! Use edit button!")
+                financial_status.save()
+
             else:
                 print("Category does not exist! Perform your logic here.")
-                financial_status.is_created_in_dashboard = False
-                financial_status.save()
+
 
 
             return redirect('dashboard')
