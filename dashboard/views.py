@@ -35,23 +35,31 @@ def add_new_financial_status(request):
             financial_status.user = request.user
             
 
+            """
+            TODO If entry(amount) for category exist, dont add new entry
 
-            # TODO If entry(amount) for category exist, dont add new entry
+            When you set is_created_in_dashboard to True for a category, it should remain True for all 
+            future entries in that category.
+            There should be no other process or functionality in your application that modifies 
+            the is_created_in_dashboard field for existing entries in a category.
+            When creating a new entry, the code should correctly check the is_created_in_dashboard 
+            status for the category and take appropriate action based on whether it's True or False.
+            """
             category = form.cleaned_data.get('category')
             amount = form.cleaned_data.get('amount')
+            entries_exist = FinancialStatus.objects.filter(user=request.user, category=category).exists()
 
-            entries_exist = FinancialStatus.objects.filter(category=category)
-
+            print()
+            print("category: ", category)
+            print("amount: ", amount)
             print("entries_exist: ", entries_exist)
 
-            financial_status.is_created_in_dashboard = entries_exist
-
-            if financial_status.is_created_in_dashboard:
-                print("Category exists! Use edit button!")
-                financial_status.save()
-
+            if entries_exist:
+                print("Category exists! Can't add this category!")
             else:
-                print("Category does not exist! Perform your logic here.")
+                print("Category does not exist! Adding as new category")
+                financial_status.is_created_in_dashboard = True
+                financial_status.save()
 
 
 

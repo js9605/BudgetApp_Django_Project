@@ -5,6 +5,7 @@ from decimal import Decimal
 from django.db.models.signals import post_migrate
 from django.dispatch import receiver
 from simple_history.models import HistoricalRecords
+from django.utils import timezone
 
 
 class Category(models.Model):
@@ -27,7 +28,7 @@ class FinancialStatus(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00'))
     category = models.ForeignKey(Category, on_delete=models.CASCADE) # (e.g., bank accounts, cash)
     date = models.DateField(auto_now_add=True)
-    timestamp = models.DateTimeField(default=datetime.now)
+    timestamp = models.DateTimeField(default=timezone.now)
     is_created_in_dashboard = models.BooleanField(default=False)
 
     history = HistoricalRecords()
