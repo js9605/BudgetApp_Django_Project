@@ -25,7 +25,7 @@
     <h2>Add New Financial Status Category</h2>
     <form method="post" action="{% url 'add_new_financial_status' %}">
       {% csrf_token %}
-      {{ form.as_p }}
+      {{ financial_status_form.as_p }}
       <button type="submit" class="btn btn-primary">Add Financial Status</button>
     </form>
   </div>
