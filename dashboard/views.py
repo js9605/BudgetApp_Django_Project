@@ -12,15 +12,13 @@ from financial_status.models import FinancialStatus, Category
 def dashboard(request):
     user_dashboard, created = Dashboard.objects.get_or_create(user=request.user)
 
-    # financial_status_data = user_dashboard.get_financial_status()
     last_financial_status_entries = user_dashboard.get_latest_financial_status()
     edit_urls = generate_urls(last_financial_status_entries, 'edit_financial_status')
-
-    form = FinancialStatusForm()
+    financial_status_form = FinancialStatusForm()
 
     context = {
         'financial_status_data': zip(last_financial_status_entries, edit_urls),
-        'form': form,
+        'financial_status_form': financial_status_form,
         'edit_mode': False,
     }
 
