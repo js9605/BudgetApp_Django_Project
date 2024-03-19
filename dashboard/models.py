@@ -41,12 +41,5 @@ class Dashboard(models.Model):
                 })
 
         return latest_financial_status_data
-    
-    # def get_expense_tracking_data(self):
-
-    #     # Fetch and format data from the expenses_tracking app
-    #     expenses = Expenses.objects.filter(user=self.user)
-    #     expense_data = '\n'.join([f"{expense.category}: ${expense.amount}" for expense in expenses])
-    #     return expense_data
 
 

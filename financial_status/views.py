@@ -2,7 +2,6 @@ from django.shortcuts import render
 from django.shortcuts import redirect, render
 from django.shortcuts import get_object_or_404
 
-
 from financial_status.forms import FinancialStatusForm
 from financial_status.models import FinancialStatus
 
