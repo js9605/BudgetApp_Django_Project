@@ -2,6 +2,7 @@
 
 {% block content %}
   <div class="container mt-5">
+
     <h2>Your Account Balance</h2>
     <table class="table">
       <thead>
@@ -22,11 +23,42 @@
         {% endfor %}
       </tbody>
     </table>
+
     <h2>Add New Financial Status Category</h2>
     <form method="post" action="{% url 'add_new_financial_status' %}">
       {% csrf_token %}
       {{ financial_status_form.as_p }}
       <button type="submit" class="btn btn-primary">Add Financial Status</button>
     </form>
+
+    <div style="margin-top: 40px;"></div>
+
+    <h2>Sources of Income</h2>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Title</th>
+          <th scope="col">Category</th>
+          <th scope="col">Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for entry in earning_source_data %}
+          <tr>
+            <td>{{ entry.title }}</td>
+            <td>{{ entry.category }}</td>
+            <td>${{ entry.amount }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <h2>Add New Earning Source</h2>
+    <form method="post" action="{% url 'add_new_earning_source' %}">
+      {% csrf_token %}
+      {{ earning_source_form.as_p }}
+      <button type="submit" class="btn btn-primary">Add New Earning Source</button>
+    </form>
+
   </div>
 {% endblock %}

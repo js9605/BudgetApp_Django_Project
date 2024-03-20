@@ -1,9 +1,14 @@
 from django.shortcuts import render
 from django.shortcuts import redirect, render
 from django.shortcuts import get_object_or_404
+from django.contrib.auth import get_user_model
 
 from financial_status.forms import FinancialStatusForm
 from financial_status.models import FinancialStatus
+
+
+User = get_user_model()
+
 
 
 def add_new_financial_status(request):
@@ -15,7 +20,6 @@ def add_new_financial_status(request):
             financial_status.user = request.user
             
             category = form.cleaned_data.get('category')
-            amount = form.cleaned_data.get('amount')
             entries_exist = FinancialStatus.objects.filter(user=request.user, category=category).exists()
 
             if entries_exist:
