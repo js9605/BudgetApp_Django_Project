@@ -27,7 +27,7 @@ def user_profile(request):
     return render(request, 'accounts/profile_details.html', context) #Simple version. For visual overhaul go to dashboard
 
 def register_user(request):
-    form = UserRegistrationForm() #TODO
+    form = UserRegistrationForm()
 
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
