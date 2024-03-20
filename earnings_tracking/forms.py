@@ -11,3 +11,6 @@ class EarningsTrackingForm(forms.ModelForm):
             'category',
             'amount'
         ]
+        labels = {
+            'amount': 'Monthly Earnings'
+        }

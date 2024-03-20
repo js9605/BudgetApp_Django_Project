@@ -6,6 +6,7 @@ from earnings_tracking.models import EarningsTracking
 
 
 def add_new_earning_source(request):
+    # TODO Add Celery worker to update financial_status every month (like employee payment)
     if request.method == 'POST':
         form = EarningsTrackingForm(request.POST)
 
@@ -14,6 +15,7 @@ def add_new_earning_source(request):
             earning_source.user = request.user
 
             earning_source.save()
+
             return redirect('dashboard')
         else:
             print("DEBUG: Form invalid for add_new_earning_source()")
