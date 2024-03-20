@@ -31,8 +31,9 @@
       <button type="submit" class="btn btn-primary">Add Financial Status</button>
     </form>
 
+    <div style="margin-top: 40px;"></div>
 
-    <h2>Earnings</h2>
+    <h2>Sources of Income</h2>
     <table class="table">
       <thead>
         <tr>
@@ -42,7 +43,7 @@
         </tr>
       </thead>
       <tbody>
-        {% for entry in earning_source %}
+        {% for entry in earning_source_data %}
           <tr>
             <td>{{ entry.title }}</td>
             <td>{{ entry.category }}</td>
@@ -55,7 +56,7 @@
     <h2>Add New Earning Source</h2>
     <form method="post" action="{% url 'add_new_earning_source' %}">
       {% csrf_token %}
-      {{ earning_source.as_p }}
+      {{ earning_source_form.as_p }}
       <button type="submit" class="btn btn-primary">Add New Earning Source</button>
     </form>
 

@@ -47,10 +47,10 @@ class Dashboard(models.Model):
 
         return latest_financial_status_data
 
-    def get_earning_source(self):
+    def get_earning_sources(self):
         earning_sources = EarningsTracking.objects.filter()
         earning_source_data = [
-            {'id': earning_source.id, 'title': earning_source.title, 'category': earning_source.category}
+            {'id': earning_source.id, 'title': earning_source.title, 'category': earning_source.category, 'amount': earning_source.amount}
             for earning_source in earning_sources
         ]
 

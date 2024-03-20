@@ -20,7 +20,6 @@ def add_new_financial_status(request):
             financial_status.user = request.user
             
             category = form.cleaned_data.get('category')
-            amount = form.cleaned_data.get('amount')
             entries_exist = FinancialStatus.objects.filter(user=request.user, category=category).exists()
 
             if entries_exist:
