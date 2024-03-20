@@ -12,5 +12,5 @@ urlpatterns = [
 
     # TODO
     path('add_new_earning_source/', add_new_earning_source, name='add_new_earning_source'),
-    path('add_single_earning/', add_new_earning, name='add_new_earning')
+    # path('add_single_earning/', add_new_earning, name='add_new_earning') #TODO
 ]

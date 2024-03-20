@@ -14,7 +14,7 @@ class Category(models.Model):
     def __str__(self):
         return self.name
     
-
+    
 User = get_user_model()
 class FinancialStatus(models.Model):
 

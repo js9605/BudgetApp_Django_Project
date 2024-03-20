@@ -13,10 +13,14 @@ def dashboard(request):
     edit_urls = generate_urls(last_financial_status_entries, 'edit_financial_status')
     financial_status_form = FinancialStatusForm()
 
+    earning_source = user_dashboard.get_earning_source()
+
     context = {
         'financial_status_data': zip(last_financial_status_entries, edit_urls),
         'financial_status_form': financial_status_form,
         'edit_mode': False,
+
+        'earning_source': earning_source
     }
 
     return render(request, 'data_visualisation/dashboard.html', context)

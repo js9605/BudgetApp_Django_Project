@@ -5,13 +5,18 @@ from django.db.models import Max
 
 # from expenses_tracking.models import Expenses #TODO
 from financial_status.models import FinancialStatus, Category
+from earnings_tracking.models import EarningsTracking
+
 
 
 User = get_user_model()
-
 class Dashboard(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    """
+    Keep in mind that these methods are related to fetching data from the FinancialStatus
+    model, so it might make more sense to keep them within the Dashboard model.
+    """
 
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     def get_financial_status(self):
 
         financial_statuses = FinancialStatus.objects.filter()
@@ -42,4 +47,11 @@ class Dashboard(models.Model):
 
         return latest_financial_status_data
 
+    def get_earning_source(self):
+        earning_sources = EarningsTracking.objects.filter()
+        earning_source_data = [
+            {'id': earning_source.id, 'title': earning_source.title, 'category': earning_source.category}
+            for earning_source in earning_sources
+        ]
 
+        return earning_source_data
