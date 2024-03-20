@@ -8,9 +8,6 @@ from financial_status.models import FinancialStatus
 
 
 User = get_user_model()
-
-
-
 def add_new_financial_status(request):
     if request.method == 'POST':
         form = FinancialStatusForm(request.POST)

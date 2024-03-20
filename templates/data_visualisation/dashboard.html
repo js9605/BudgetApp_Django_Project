@@ -40,6 +40,7 @@
           <th scope="col">Title</th>
           <th scope="col">Category</th>
           <th scope="col">Amount</th>
+          <th scope="col">Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -48,6 +49,12 @@
             <td>{{ entry.title }}</td>
             <td>{{ entry.category }}</td>
             <td>${{ entry.amount }}</td>
+            <td>
+              <form action="{% url 'delete_earning_source' entry.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Delete</button>
+              </form>
+            </td>
           </tr>
         {% endfor %}
       </tbody>
