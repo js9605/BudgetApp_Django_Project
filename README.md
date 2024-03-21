@@ -21,7 +21,7 @@ Welcome to the BudgetApp Django Project! This project is designed to help users 
 1. Install dependencies: `pip install -r requirements.txt`
 2. Run migrations: `python manage.py migrate`
 3. Run the development server: `python manage.py runserver`
-4. Create user 
+4. Register user 
 
 ## Contributing
 Contributions are welcome! Please fork the repository, create a new branch, and submit a pull request.
