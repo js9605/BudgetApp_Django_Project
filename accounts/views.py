@@ -8,19 +8,31 @@ from django.contrib.auth import authenticate, login, logout
 # from earnings_tracking.models import EarningsTracking #TODO
 from financial_status.models import FinancialStatus
 from .forms import UserRegistrationForm
+from .models import UserProfile
+from .forms import EditUserProfileForm
 
 
 @login_required
 def user_profile(request):
     user = request.user
+    profile, created = UserProfile.objects.get_or_create(user=user)
+
+    form = EditUserProfileForm(instance=profile)
 
     # expenses = ExpensesTracking.objects.filter(author=user).all()
     # earnings = EarningsTracking.objects.filer(author=user).all()
     financial_status = FinancialStatus.objects.filter(user=user).all()
 
+    if request.method == 'POST':
+        form = EditUserProfileForm(request.POST, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect('user_profile')
+
     context = {
         # 'expenses':expenses,
         # 'earnings':earnings,
+        'form': form,
         'financial_status':financial_status
     }
 
