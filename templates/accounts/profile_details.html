@@ -3,6 +3,7 @@
 {% block content %}
   <div class="container mt-5">
     <h2>User Profile</h2>
+    <p>Working Hours: {{ working_hours }}</p>
     <form method="post">
       {% csrf_token %}
       {{ form.as_p }}

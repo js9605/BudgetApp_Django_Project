@@ -20,11 +20,12 @@ BudgetApp_Django_Project/
 |   |-- accounts/
 |   |   |-- profile_details.html
 |   |   |-- register_user.html
-|   |   |-- login_user.html
 |   |-- data_visualisation/
 |   |   |-- dashboard.html
 |   |-- base.html
 |-- static/
+|-- utils/
+|   |-- working_hours_calculator.py
 |-- venv/
 |-- gitignore
 |-- db.sqlite3
