@@ -10,6 +10,7 @@ from financial_status.models import FinancialStatus
 from .forms import UserRegistrationForm
 from .models import UserProfile
 from .forms import EditUserProfileForm
+from Utils.working_hours_calculator import working_hours_per_month
 
 
 @login_required
@@ -23,6 +24,8 @@ def user_profile(request):
     # earnings = EarningsTracking.objects.filer(author=user).all()
     financial_status = FinancialStatus.objects.filter(user=user).all()
 
+    working_hours = working_hours_per_month(request)
+
     if request.method == 'POST':
         form = EditUserProfileForm(request.POST, instance=profile)
         if form.is_valid():
@@ -32,11 +35,12 @@ def user_profile(request):
     context = {
         # 'expenses':expenses,
         # 'earnings':earnings,
+        'working_hours': working_hours,
         'form': form,
         'financial_status':financial_status
     }
 
-    return render(request, 'accounts/profile_details.html', context) #Simple version. For visual overhaul go to dashboard
+    return render(request, 'accounts/profile_details.html', context) # TODO Simple version. For visual overhaul go to dashboard
 
 def register_user(request):
     form = UserRegistrationForm()
