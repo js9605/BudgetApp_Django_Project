@@ -1,10 +1,11 @@
 from calendar import monthrange
+import holidays
 
 from accounts.models import UserProfile
 from datetime import datetime
 
 
-def working_hours_per_month(request):
+def working_hours_per_month(request, month):
     user = request.user
 
     try:
@@ -13,43 +14,43 @@ def working_hours_per_month(request):
         print("UserProfile.DoesNotExist for calculate_working_hours_per_month")
         return None
 
-    working_hours_per_day = user_profile.working_hours_per_day
-    num_days = working_days_for_current_month()
+    working_hours_given_month = generate_working_hours(month, user_profile)
 
-    print(f"DEBUG: working hours: {working_hours_per_day * num_days}")
 
-    #TODO Subtract free days, sat, sun, holidays
+    return working_hours_given_month
 
-    return working_hours_per_day * num_days
+def holidays_given_month(month):
+    polish_holidays = holidays.Poland()
 
-def working_days_for_current_month():
-    current_month = datetime.now().month
+    free_days = 0
+
+    for date in polish_holidays:
+        if int(month) == int(date.month):
+            free_days += 1  
+
+    return free_days
+
+def number_of_working_days(month):
     current_year = datetime.now().year
 
-    # Get the first day of the month
-    first_day_of_month = datetime(current_year, current_month, 1)
+    _, num_days_in_month = monthrange(current_year, month)
 
-    # Initialize the count of working days
-    working_days = 0
-    # Iterate over each day in the month
-    for day in range(first_day_of_month.day, first_day_of_month.day + 31):
-        current_date = datetime(current_year, current_month, day)
+    # iterate every day of the month to count only working days
+    number_of_working_days = 0
+    for day in range(1, num_days_in_month + 1):
+        current_date = datetime(current_year, month, day)
+        if current_date.weekday() not in [5, 6]:  # subtract sat/sun
+            number_of_working_days += 1
 
-        # Check if the current day is a Saturday or Sunday
-        if current_date.weekday() not in [5, 6]:
-            working_days += 1
+    return number_of_working_days
 
-    return working_days
+def generate_working_hours(month, user_profile):
+    working_hours_per_day = user_profile.working_hours_per_day
+    number_of_holidays_given_month = holidays_given_month(month)  
 
+    return working_hours_per_day * (number_of_working_days(month) - number_of_holidays_given_month)
 
-
-
-"""
-USAGE:
-
-User = get_user_model()
-user = User.objects.get(username='example_user')  # Replace 'example_user' with the actual username
-total_working_hours_current_month = get_working_hours_current_month(user)
-print("Total working hours for the current month:", total_working_hours_current_month)
-
-"""
+#TODO Function to create a list of estimated earnings for future months
+def create_list_of_estimated_earning_for_months(working_hours_given_month):
+    # earnings = working_hours_given_month * earnings/h
+    pass

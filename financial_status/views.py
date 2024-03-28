@@ -9,11 +9,6 @@ from financial_status.models import FinancialStatus
 
 User = get_user_model()
 def add_new_financial_status(request):
-    """
-    TODO
-    Return information:
-        Financial status under that category exists. Use edit button to edit amount
-    """
     if request.method == 'POST':
         form = FinancialStatusForm(request.POST)
 
@@ -25,7 +20,7 @@ def add_new_financial_status(request):
             entries_exist = FinancialStatus.objects.filter(user=request.user, category=category).exists()
 
             if entries_exist:
-                print("Category exists! Can't add this category!")
+                print("Category exists! Can't add duplicated category!")
             else:
                 print("Category does not exist! Adding as new category")
                 financial_status.is_created_in_dashboard = True

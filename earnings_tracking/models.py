@@ -13,12 +13,8 @@ class EarningsTracking(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
     title = models.CharField(max_length=100, default="")
     description = models.TextField(default="") 
-    
-    # Category to which add money
     category = models.ForeignKey(Category, on_delete=models.CASCADE, default=None, null=True)
-
-    # amount of earnings / h used to calculate earnings at the end of the month
-    amount = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00'))
+    amount = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00')) # earnings / h
 
     def __str__(self):
         return self.title
