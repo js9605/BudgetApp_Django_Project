@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
+from datetime import datetime
 
 # from expenses_tracking.models import ExpensesTracking #TODO
 # from earnings_tracking.models import EarningsTracking #TODO
@@ -24,7 +25,7 @@ def user_profile(request):
     # earnings = EarningsTracking.objects.filer(author=user).all()
     financial_status = FinancialStatus.objects.filter(user=user).all()
 
-    working_hours = working_hours_per_month(request)
+    working_hours = working_hours_per_month(request, datetime.now().month)
 
     if request.method == 'POST':
         form = EditUserProfileForm(request.POST, instance=profile)
@@ -40,7 +41,7 @@ def user_profile(request):
         'financial_status':financial_status
     }
 
-    return render(request, 'accounts/profile_details.html', context) # TODO Simple version. For visual overhaul go to dashboard
+    return render(request, 'accounts/profile_details.html', context)
 
 def register_user(request):
     form = UserRegistrationForm()

@@ -1,8 +1,10 @@
 from django.shortcuts import redirect, render
 from django.shortcuts import get_object_or_404
+from datetime import datetime
 
 from earnings_tracking.forms import EarningsTrackingForm
 from earnings_tracking.models import EarningsTracking
+from Utils.working_hours_calculator import working_hours_per_month
 
 
 def add_new_earning_source(request):
@@ -43,3 +45,19 @@ def delete_earning_source(request, pk):
         return redirect('dashboard')
     
     return redirect('dashboard')
+
+def generate_estimated_earnings_list(request,  earning_source_data):
+    list_of_earnings_per_month = []
+
+    months = [1,2,3,4,5,6,7,8,9,10,11,12]
+
+    for month in months:
+        amounts = [entry['amount']  for entry in earning_source_data]
+        category = [entry['category']  for entry in earning_source_data]
+        
+        for amount in amounts: #TODO divide it to calculate per category!
+            month_sum =+ amount * working_hours_per_month(request, month)
+
+        list_of_earnings_per_month.append(month_sum)
+
+    return list_of_earnings_per_month
