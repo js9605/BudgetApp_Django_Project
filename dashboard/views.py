@@ -19,12 +19,13 @@ def dashboard(request):
     earning_source_form = EarningsTrackingForm()
     earning_source_data = user_dashboard.get_earning_sources()
 
+    print("DEBUG earning_source_data: ", earning_source_data)
+
     estimate_future_earnings = estimate_earnings(request, earning_source_data)
 
+    #TODO Add estimated accoubnt balance task
     amount_float = float(last_financial_status_data[0]['amount'])
-
     estimated_account_balance_list = [(float(earning) + amount_float) for earning in estimate_future_earnings]
-
 
     context = {
         'estimated_account_balance_list': estimated_account_balance_list,

@@ -6,7 +6,6 @@ from django.contrib.auth import authenticate, login, logout
 from datetime import datetime
 
 # from expenses_tracking.models import ExpensesTracking #TODO
-# from earnings_tracking.models import EarningsTracking #TODO
 from financial_status.models import FinancialStatus
 from .forms import UserRegistrationForm
 from .models import UserProfile
