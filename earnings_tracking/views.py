@@ -50,14 +50,19 @@ def generate_estimated_earnings_list(request,  earning_source_data):
     list_of_earnings_per_month = []
 
     months = [1,2,3,4,5,6,7,8,9,10,11,12]
-
+    amounts = [entry['amount']  for entry in earning_source_data]
+    category = [entry['category']  for entry in earning_source_data]
+    
     for month in months:
-        amounts = [entry['amount']  for entry in earning_source_data]
-        category = [entry['category']  for entry in earning_source_data]
+
+        print("DEBUG")
+        print(earning_source_data)
+        # print(amounts)
+        # print(working_hours_per_month(request, month))
         
-        for amount in amounts: #TODO divide it to calculate per category!
-            month_sum =+ amount * working_hours_per_month(request, month)
+        # for amount in amounts: #TODO divide it to calculate per category!
+        #     month_sum =+ amount * working_hours_per_month(request, month)
 
-        list_of_earnings_per_month.append(month_sum)
+        # list_of_earnings_per_month.append(month_sum)
 
-    return list_of_earnings_per_month
+    # return list_of_earnings_per_month

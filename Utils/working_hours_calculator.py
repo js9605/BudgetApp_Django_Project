@@ -19,6 +19,12 @@ def working_hours_per_month(request, month):
 
     return working_hours_given_month
 
+def generate_working_hours(month, user_profile):
+    working_hours_per_day = user_profile.working_hours_per_day
+    number_of_holidays_given_month = holidays_given_month(month)  
+
+    return working_hours_per_day * (number_of_working_days(month) - number_of_holidays_given_month)
+
 def holidays_given_month(month):
     polish_holidays = holidays.Poland()
 
@@ -43,12 +49,6 @@ def number_of_working_days(month):
             number_of_working_days += 1
 
     return number_of_working_days
-
-def generate_working_hours(month, user_profile):
-    working_hours_per_day = user_profile.working_hours_per_day
-    number_of_holidays_given_month = holidays_given_month(month)  
-
-    return working_hours_per_day * (number_of_working_days(month) - number_of_holidays_given_month)
 
 #TODO Function to create a list of estimated earnings for future months
 def create_list_of_estimated_earning_for_months(working_hours_given_month):
