@@ -20,11 +20,13 @@ def dashboard(request):
     earning_source_data = user_dashboard.get_earning_sources()
 
     print("DEBUG earning_source_data: ", earning_source_data)
+    print("DEBUG: USER TEST ", user_dashboard)
 
     estimate_future_earnings = estimate_earnings(request, earning_source_data)
 
     #TODO Add estimated accoubnt balance task
     amount_float = float(last_financial_status_data[0]['amount'])
+    print("DEBUG amount_float: ", amount_float)
     estimated_account_balance_list = [(float(earning) + amount_float) for earning in estimate_future_earnings]
 
     context = {
