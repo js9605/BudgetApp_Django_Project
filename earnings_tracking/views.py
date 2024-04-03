@@ -47,6 +47,7 @@ def delete_earning_source(request, pk):
     return redirect('dashboard')
 
 def generate_estimated_earnings_list(request,  earning_source_data):
+    print("\n---generate_estimated_earnings_list---\n")
     list_of_earnings_per_month = []
 
     months = [1,2,3,4,5,6,7,8,9,10,11,12]
@@ -55,14 +56,13 @@ def generate_estimated_earnings_list(request,  earning_source_data):
     
     for month in months:
 
-        print("DEBUG")
-        print(earning_source_data)
-        # print(amounts)
-        # print(working_hours_per_month(request, month))
+        print("DEBUG earning_source_data: ", earning_source_data)
+        print("DEBUG amounts: ", amounts)
+        print("DEBUG working_hours_per_month(request, month): ", working_hours_per_month(request, month))
         
-        # for amount in amounts: #TODO divide it to calculate per category!
-        #     month_sum =+ amount * working_hours_per_month(request, month)
+        for amount in amounts: #TODO divide it to calculate per category!
+            month_sum =+ amount * working_hours_per_month(request, month)
 
-        # list_of_earnings_per_month.append(month_sum)
+        list_of_earnings_per_month.append(month_sum)
 
-    # return list_of_earnings_per_month
+    return list_of_earnings_per_month
