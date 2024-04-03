@@ -10,23 +10,7 @@ from datetime import datetime
 def working_hours_per_month(request, month):
     print("\n---working_hours_per_month---\n")
 
-    """
-    Problem musi lezec wyzej bo tutaj na userze się wywalają wszystkie debugi
-    """
-
-    print("DEBUG request: ", request)
-
-    if request.user is None:
-        print("DEBUG: User is None")
-        return redirect(reverse('login'))
-    else: 
-        print("DEBUG: User is not None")
-
-    user = request.user
-    user_id = request.user.id
-
     try:
-        # user_profile = UserProfile.objects.get(user_id=user_id)
         user_profile = get_object_or_404(UserProfile, user=request.user)
     except UserProfile.DoesNotExist:
         print("UserProfile.DoesNotExist for calculate_working_hours_per_month")
