@@ -44,11 +44,9 @@ def edit_financial_status(request, financial_status_id):
         form = FinancialStatusForm(request.POST, instance=financial_status) 
 
         if form.is_valid():
-            print("Form is valid for edit_financial_status")
             form.save()
             return redirect('dashboard')
         else:
-            print("Form is invalid for edit_financial_status")
             print(form.errors)
     else:
         form = FinancialStatusForm()

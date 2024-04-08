@@ -54,15 +54,14 @@ def generate_estimated_earnings_list(request,  earning_source_data):
     amounts = [entry['amount']  for entry in earning_source_data]
     category = [entry['category']  for entry in earning_source_data]
     
-    for month in months:
+    if amounts:
+        for month in months:      
+            for amount in amounts: #TODO divide it to calculate per category!
+                month_sum =+ amount * working_hours_per_month(request, month)
 
-        print("DEBUG earning_source_data: ", earning_source_data)
-        print("DEBUG amounts: ", amounts)
-        print("DEBUG working_hours_per_month(request, month): ", working_hours_per_month(request, month))
-        
-        for amount in amounts: #TODO divide it to calculate per category!
-            month_sum =+ amount * working_hours_per_month(request, month)
+            list_of_earnings_per_month.append(month_sum)
 
-        list_of_earnings_per_month.append(month_sum)
-
-    return list_of_earnings_per_month
+        return list_of_earnings_per_month
+    else:
+        print("LOG: User amount list is empty")
+        return redirect('dashboard')
