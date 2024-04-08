@@ -8,8 +8,6 @@ from datetime import datetime
 
 
 def working_hours_per_month(request, month):
-    print("\n---working_hours_per_month---\n")
-
     try:
         user_profile = get_object_or_404(UserProfile, user=request.user)
     except UserProfile.DoesNotExist:
@@ -22,6 +20,7 @@ def working_hours_per_month(request, month):
 def generate_working_hours(month, user_profile):
     working_hours_per_day = user_profile.working_hours_per_day
     number_of_holidays_given_month = holidays_given_month(month)  
+    # number_of_working_days = number_of_working_days(month)
 
     return working_hours_per_day * (number_of_working_days(month) - number_of_holidays_given_month)
 

@@ -10,8 +10,6 @@ from earnings_tracking.views import generate_estimated_earnings_list
 
 
 def dashboard(request):
-    print("\n---dashboard---\n")
-
     user_dashboard, created = Dashboard.objects.get_or_create(user=request.user)
 
     last_financial_status_data = user_dashboard.get_latest_financial_status()
@@ -21,15 +19,10 @@ def dashboard(request):
     earning_source_form = EarningsTrackingForm()
     earning_source_data = user_dashboard.get_earning_sources()
 
-    print("DEBUG earning_source_data: ", earning_source_data)
-    print("DEBUG: USER TEST ", user_dashboard)
-
     estimate_future_earnings = estimate_earnings(request, earning_source_data)
 
     #TODO Add estimated accoubnt balance task
-    print("DEBUG last_financial_status_data: ", last_financial_status_data)
     amount_float = float(last_financial_status_data[0]['amount'])
-    print("DEBUG amount_float: ", amount_float)
     estimated_account_balance_list = [(float(earning) + amount_float) for earning in estimate_future_earnings]
 
     context = {
@@ -53,7 +46,10 @@ def estimate_earnings(request, earning_source_data):
     estimate_earnings_for_future_2_months = []
     estimated_earnings_list = generate_estimated_earnings_list(request, earning_source_data)
 
+    # for entry in estimated_earnings_list:
+    #     print(entry)
+
     for i in range(datetime.now().month+1, datetime.now().month+3):
-        estimate_earnings_for_future_2_months.append(estimated_earnings_list[i])
+        estimate_earnings_for_future_2_months.append(estimated_earnings_list[i]) # Work ended here 
 
     return estimate_earnings_for_future_2_months
