@@ -25,7 +25,7 @@
     
     <tr>
       <td colspan="3">
-          <strong>Estimated Account Balance:</strong>
+          <strong>estimation for future months:</strong>
           <span style="color: #888;">
               {% with current_month=now|date:"F" %}
                   {% with next_month=now|date:"F"|date:"F" %}
@@ -38,7 +38,7 @@
               {% endwith %}
           </span>
       </td>
-  </tr>
+    </tr>
       </tbody>
     </table>
 
@@ -84,7 +84,7 @@
 
     <hr>
 
-    <h2>Add New Earning Source</h2>
+    <h2>Add New Source of Income</h2>
     <form method="post" action="{% url 'add_new_earning_source' %}">
       {% csrf_token %}
       {{ earning_source_form.as_p }}
