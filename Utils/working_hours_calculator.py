@@ -20,18 +20,23 @@ def working_hours_per_month(request, month):
 def generate_working_hours(month, user_profile):
     working_hours_per_day = user_profile.working_hours_per_day
     number_of_holidays_given_month = holidays_given_month(month)  
-    # number_of_working_days = number_of_working_days(month)
 
     return working_hours_per_day * (number_of_working_days(month) - number_of_holidays_given_month)
 
 def holidays_given_month(month):
     polish_holidays = holidays.Poland()
+    current_year = datetime.now().year
 
     free_days = 0
 
-    for date in polish_holidays:
+
+    current_year = datetime.now().year
+    polish_holidays = holidays.Poland(years=current_year)
+
+    for date, name in polish_holidays.items():
         if int(month) == int(date.month):
-            free_days += 1  
+            print(date, name)
+            free_days += 1
 
     return free_days
 

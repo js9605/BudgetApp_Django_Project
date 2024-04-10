@@ -46,10 +46,12 @@ def estimate_earnings(request, earning_source_data):
     estimate_earnings_for_future_2_months = []
     estimated_earnings_list = generate_estimated_earnings_list(request, earning_source_data)
 
-    # for entry in estimated_earnings_list:
-    #     print(entry)
+    current_month_number = datetime.now().month
+    print("ciupaga: ", estimated_earnings_list[current_month_number])
+    estimate_earnings_for_future_2_months.append(estimated_earnings_list[current_month_number - 1])
+    estimate_earnings_for_future_2_months.append(estimated_earnings_list[current_month_number])
 
-    for i in range(datetime.now().month+1, datetime.now().month+3):
-        estimate_earnings_for_future_2_months.append(estimated_earnings_list[i]) # Work ended here 
+    # for i in range(datetime.now().month+1, datetime.now().month+3):
+    #     estimate_earnings_for_future_2_months.append(estimated_earnings_list[i]) # Work ended here 
 
     return estimate_earnings_for_future_2_months
