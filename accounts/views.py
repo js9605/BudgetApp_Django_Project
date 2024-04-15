@@ -49,10 +49,12 @@ def register_user(request):
         form = UserRegistrationForm(request.POST)
 
         if form.is_valid():
-            form.save()
+            user = form.save()  # Save the user
+
+            # Create UserProfile for the newly registered user
+            UserProfile.objects.create(user=user)
 
             return redirect(reverse('login_page'))
-        
         else:
             print(f"Form errors(register_user): {form.errors}")
 

@@ -12,16 +12,17 @@ from earnings_tracking.views import generate_estimated_earnings_list
 def dashboard(request):
     user_dashboard, created = Dashboard.objects.get_or_create(user=request.user)
 
+    financial_status_form = FinancialStatusForm()
     last_financial_status_data = user_dashboard.get_latest_financial_status()
     edit_urls = generate_urls(last_financial_status_data, 'edit_financial_status')
-    financial_status_form = FinancialStatusForm()
 
     earning_source_form = EarningsTrackingForm()
     earning_source_data = user_dashboard.get_earning_sources()
 
-    estimate_future_earnings = estimate_earnings(request, earning_source_data)
+    print("DEBUG: last_financial_status_data", last_financial_status_data)
+    print("DEBUG: earning_source_data", earning_source_data)
 
-    #TODO Add estimated accoubnt balance task
+    estimate_future_earnings = estimate_earnings(request, earning_source_data)
     amount_float = float(last_financial_status_data[0]['amount'])
     estimated_account_balance_list = [(float(earning) + amount_float) for earning in estimate_future_earnings]
 
@@ -37,8 +38,6 @@ def dashboard(request):
 
     return render(request, 'data_visualisation/dashboard.html', context)
 
-
-# Utils
 def generate_urls(data: List[Dict[str, Any]], url_name):
     return [reverse(url_name, args=[entry['id']]) for entry in data]
 
@@ -47,11 +46,7 @@ def estimate_earnings(request, earning_source_data):
     estimated_earnings_list = generate_estimated_earnings_list(request, earning_source_data)
 
     current_month_number = datetime.now().month
-    print("ciupaga: ", estimated_earnings_list[current_month_number])
     estimate_earnings_for_future_2_months.append(estimated_earnings_list[current_month_number - 1])
     estimate_earnings_for_future_2_months.append(estimated_earnings_list[current_month_number])
-
-    # for i in range(datetime.now().month+1, datetime.now().month+3):
-    #     estimate_earnings_for_future_2_months.append(estimated_earnings_list[i]) # Work ended here 
 
     return estimate_earnings_for_future_2_months

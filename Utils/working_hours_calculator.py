@@ -1,7 +1,6 @@
 from calendar import monthrange
 import holidays
 from django.shortcuts import redirect, get_object_or_404
-from django.urls import reverse
 
 from accounts.models import UserProfile
 from datetime import datetime
@@ -33,16 +32,14 @@ def holidays_given_month(month):
     current_year = datetime.now().year
     polish_holidays = holidays.Poland(years=current_year)
 
-    for date, name in polish_holidays.items():
+    for date, _ in polish_holidays.items():
         if int(month) == int(date.month):
-            print(date, name)
             free_days += 1
 
     return free_days
 
 def number_of_working_days(month):
     current_year = datetime.now().year
-
     _, num_days_in_month = monthrange(current_year, month)
 
     # iterate every day of the month to count only working days
@@ -53,8 +50,3 @@ def number_of_working_days(month):
             number_of_working_days += 1
 
     return number_of_working_days
-
-#TODO Function to create a list of estimated earnings for future months
-def create_list_of_estimated_earning_for_months(working_hours_given_month):
-    # earnings = working_hours_given_month * earnings/h
-    pass

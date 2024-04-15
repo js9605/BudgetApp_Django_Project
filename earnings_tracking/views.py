@@ -40,9 +40,15 @@ def add_new_earning(request):
 def delete_earning_source(request, pk):
     earning_source = get_object_or_404(EarningsTracking, pk=pk)
 
-    if request.method == 'POST':
+    print("DEBUG delete_earning_source/earning_source: ", earning_source)
+
+    if request.method == 'POST' and EarningsTracking.objects.count() > 1:
         earning_source.delete()
         return redirect('dashboard')
+    elif EarningsTracking.objects.count() == 1:
+        earning_source.title = "No earnings"
+        earning_source.amount = 0
+        earning_source.save()
     
     return redirect('dashboard')
 
