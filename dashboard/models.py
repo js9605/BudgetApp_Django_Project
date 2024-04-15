@@ -34,6 +34,9 @@ class Dashboard(models.Model):
             latest_id=Max('id')
         )
 
+        if not latest_entries:
+            return [{'id': 0, 'category': 'No Data', 'amount': 0}]
+        
         latest_financial_status_data = []
 
         for entry in latest_entries:
