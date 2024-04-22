@@ -44,12 +44,17 @@
 
     <hr>
 
-    <h2>Add New Financial Status Category</h2>
-    <form method="post" action="{% url 'add_new_financial_status' %}">
-      {% csrf_token %}
-      {{ financial_status_form.as_p }}
-      <button type="submit" class="btn btn-primary">Add Financial Status</button>
-    </form>
+    <div class="mb-4">
+      <!-- <h4 class="mb-2">Add New Financial Status Category</h4> -->
+      <button id="toggleFinancialStatusForm" class="btn btn-sm btn-outline-secondary">+ Add Financial Status</button>
+      <div id="financialStatusFormWrapper" style="display: none;">
+        <form method="post" action="{% url 'add_new_financial_status' %}">
+          {% csrf_token %}
+          {{ financial_status_form.as_p }}
+          <button type="submit" class="btn btn-sm btn-primary">Save</button>
+        </form>
+      </div>
+    </div>
 
 
     <div style="margin-top: 120px;"></div>
@@ -84,12 +89,37 @@
 
     <hr>
 
-    <h2>Add New Source of Income</h2>
-    <form method="post" action="{% url 'add_new_earning_source' %}">
-      {% csrf_token %}
-      {{ earning_source_form.as_p }}
-      <button type="submit" class="btn btn-primary">Add New Earning Source</button>
-    </form>
+    <div class="mb-4">
+      <!-- <h4 class="mb-2">Add New Source of Income</h4> -->
+      <button id="toggleEarningSourceForm" class="btn btn-sm btn-outline-secondary">+ Add New Earning Source</button>
+      <div id="earningSourceFormWrapper" style="display: none;">
+        <form method="post" action="{% url 'add_new_earning_source' %}">
+          {% csrf_token %}
+          {{ earning_source_form.as_p }}
+          <button type="submit" class="btn btn-sm btn-primary">Save</button>
+        </form>
+      </div>
+    </div>
 
   </div>
+
+  <script>
+    document.getElementById("toggleFinancialStatusForm").addEventListener("click", function() {
+      var formWrapper = document.getElementById("financialStatusFormWrapper");
+      if (formWrapper.style.display === "none") {
+        formWrapper.style.display = "block";
+      } else {
+        formWrapper.style.display = "none";
+      }
+    });
+
+    document.getElementById("toggleEarningSourceForm").addEventListener("click", function() {
+      var formWrapper = document.getElementById("earningSourceFormWrapper");
+      if (formWrapper.style.display === "none") {
+        formWrapper.style.display = "block";
+      } else {
+        formWrapper.style.display = "none";
+      }
+    });
+  </script>
 {% endblock %}
