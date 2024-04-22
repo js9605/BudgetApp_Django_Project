@@ -8,7 +8,6 @@ from Utils.working_hours_calculator import working_hours_per_month
 
 
 def add_new_earning_source(request):
-    # TODO Add Celery worker to update financial_status every month (like employee payment)
     if request.method == 'POST':
         form = EarningsTrackingForm(request.POST)
 
@@ -27,15 +26,6 @@ def add_new_earning_source(request):
 
     context = {'form': form}
     return(render(request, 'data_visualisation/dashboard.html'), context)
-
-def add_new_earning(request):
-    """
-    TODO
-    Should add possibility to add externall earning by hand
-        - Not periodic
-        - One entry to update *Account Balance*
-    """
-    pass
 
 def delete_earning_source(request, pk):
     earning_source = get_object_or_404(EarningsTracking, pk=pk)
