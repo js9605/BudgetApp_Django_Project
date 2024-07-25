@@ -2,7 +2,7 @@ from . import views
 from django.urls import path
 
 from financial_status.views import add_new_financial_status, edit_financial_status
-from earnings_tracking.views import add_new_earning_source, add_new_earning, delete_earning_source
+from earnings_tracking.views import add_new_earning_source, delete_earning_source
 
 urlpatterns = [
     path('dashboard/', views.dashboard, name='dashboard'),
