@@ -2,6 +2,7 @@ from django.shortcuts import render
 from typing import List, Dict, Any
 from django.urls import reverse
 from datetime import datetime
+from django.contrib.auth.decorators import login_required
 
 from .models import Dashboard
 from financial_status.forms import FinancialStatusForm
@@ -9,6 +10,7 @@ from earnings_tracking.forms import EarningsTrackingForm
 from earnings_tracking.views import generate_estimated_earnings_list
 
 
+@login_required
 def dashboard(request):
     user_dashboard, created = Dashboard.objects.get_or_create(user=request.user)
 
@@ -23,8 +25,8 @@ def dashboard(request):
     print("DEBUG: earning_source_data", earning_source_data)
 
     estimate_future_earnings = estimate_earnings(request, earning_source_data)
-    amount_float = float(last_financial_status_data[0]['amount'])
-    estimated_account_balance_list = [(float(earning) + amount_float) for earning in estimate_future_earnings]
+    latest_financial_status_amount_float = float(last_financial_status_data[0]['amount'])
+    estimated_account_balance_list = [(float(earning) + latest_financial_status_amount_float) for earning in estimate_future_earnings]
 
     context = {
         'estimated_account_balance_list': estimated_account_balance_list,
