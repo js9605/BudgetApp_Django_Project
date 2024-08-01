@@ -1,8 +1,9 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
-from django.urls import reverse
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
+from django.shortcuts import render, redirect
+from django.urls import reverse
 from datetime import datetime
 
 # from expenses_tracking.models import ExpensesTracking #TODO
@@ -50,12 +51,11 @@ def register_user(request):
 
         if form.is_valid():
             user = form.save()  # Save the user
-
-            # Create UserProfile for the newly registered user
-            UserProfile.objects.create(user=user)
+            UserProfile.objects.create(user=user) # Create UserProfile for the newly registered user
 
             return redirect(reverse('login_page'))
         else:
+            messages.error(request, 'Registration failed. Please correct the errors below.')
             print(f"Form errors(register_user): {form.errors}")
 
     context = {'form': form}

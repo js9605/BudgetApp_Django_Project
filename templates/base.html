@@ -23,6 +23,7 @@
             <a href="{% url 'login_page' %}">Login</a>
         {% endif %}
     </header>
+
     {% block content %}
     {% endblock content %}
     
@@ -32,6 +33,19 @@
     <!-- Your custom styles or additional scripts go here -->
     
     <footer>
+        <!-- Messages block -->
+        <div class="container mt-3">
+            {% if messages %}
+            <div>
+                {% for message in messages %}
+                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %}" role="alert">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
         &copy; Budget App {% now "Y" %}
     </footer>
 </body>
