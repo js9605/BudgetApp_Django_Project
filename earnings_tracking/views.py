@@ -50,6 +50,7 @@ def generate_estimated_earnings_list(request,  earning_source_data):
     amounts = [entry['amount']  for entry in earning_source_data]
     category = [entry['category']  for entry in earning_source_data]
     
+    #TODO In amounts is where cash source is placed (check Fix estimated earnings in Obsydian)
     if amounts:
         for month in months:      
             for amount in amounts: #TODO divide it to calculate per category! | Better name then amount/amounts
