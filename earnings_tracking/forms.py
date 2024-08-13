@@ -12,5 +12,5 @@ class EarningsTrackingForm(forms.ModelForm):
             'amount'
         ]
         labels = {
-            'amount': 'Monthly Earnings'
+            'amount': 'Earnings per hour'
         }

@@ -9,8 +9,9 @@ from datetime import datetime
 def working_hours_per_month(request, month):
     try:
         user_profile = get_object_or_404(UserProfile, user=request.user)
+
     except UserProfile.DoesNotExist:
-        print("UserProfile.DoesNotExist for calculate_working_hours_per_month")
+        print("Error: UserProfile.DoesNotExist for calculate_working_hours_per_month")
 
     working_hours_given_month = generate_working_hours(month, user_profile)
 
@@ -18,22 +19,18 @@ def working_hours_per_month(request, month):
 
 def generate_working_hours(month, user_profile):
     working_hours_per_day = user_profile.working_hours_per_day
-    number_of_holidays_given_month = holidays_given_month(month)  
+    number_of_holidays_given_month = calculate_number_of_holidays(month)  
 
     return working_hours_per_day * (number_of_working_days(month) - number_of_holidays_given_month)
 
-def holidays_given_month(month):
+def calculate_number_of_holidays(month):
     polish_holidays = holidays.Poland()
     current_year = datetime.now().year
 
     free_days = 0
 
-
-    current_year = datetime.now().year
-    polish_holidays = holidays.Poland(years=current_year)
-
     for date, _ in polish_holidays.items():
-        if int(month) == int(date.month):
+        if int(month) == int(date.month) and date.weekday() not in [5, 6]:  # Check if the holiday is on a weekday
             free_days += 1
 
     return free_days
