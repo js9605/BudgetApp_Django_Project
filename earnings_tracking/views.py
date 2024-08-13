@@ -52,7 +52,7 @@ def generate_estimated_earnings_list(request,  earning_source_data):
     
     if amounts:
         for month in months:      
-            for amount in amounts: #TODO divide it to calculate per category!
+            for amount in amounts: #TODO divide it to calculate per category! | Better name then amount/amounts
                 month_sum =+ amount * working_hours_per_month(request, month)
 
             list_of_earnings_per_month.append(month_sum)
