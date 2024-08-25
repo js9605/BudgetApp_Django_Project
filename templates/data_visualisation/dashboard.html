@@ -2,144 +2,156 @@
 
 {% block content %}
   <div class="container mt-5">
+    <div class="row">
+      <!-- Sidebar for Section Buttons -->
+      <div class="col-md-3 col-sidebar">
+        <div class="sidebar">
+          <button id="toggleAccountBalanceSection" class="btn btn-minimalistic btn-sidebar">Account Balance</button>
+          <button id="toggleEarningsSection" class="btn btn-minimalistic btn-sidebar">Earnings</button>
+          <button id="toggleExpensesSection" class="btn btn-minimalistic btn-sidebar">Monthly Expenses</button>
+        </div>
+      </div>
 
-    <!-- Account Balance Section -->
-    <h2 class="mb-4">Account Balance</h2>
-    <div class="section">
-      <table class="table table-borderless">
-        <thead class="thead-light">
-          <tr>
-            <th scope="col">Category</th>
-            <th scope="col">Amount</th>
-            <th scope="col">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for entry, edit_url in financial_status_data %}
-          <tr>
-              <td>{{ entry.category }}</td>
-              <td>${{ entry.amount }}</td>
-              <td>
-                  <a href="{{ edit_url }}" class="btn btn-outline-warning btn-sm">Edit</a>
-              </td>
-          </tr>
-          {% endfor %}
-          <tr>
-            <td colspan="3">
-                <strong>Estimation for future months:</strong>
-                <span class="text-muted">
-                    {% with current_month=now|date:"F" %}
-                        {% with next_month=now|date:"F"|date:"F" %}
-                            {% for amount in estimated_account_balance_list %}
-                                {% if forloop.counter <= 2 %}
-                                    {{ next_month }} ${{ amount }} &nbsp;
-                                {% endif %}
-                            {% endfor %}
+      <!-- Main Content Area -->
+      <div class="col-md-9 col-content">
+        <!-- Account Balance Section -->
+        <div id="accountBalanceSection" class="section" style="display: none;">
+          <h2 class="mb-4">Account Balance</h2>
+          <table class="table table-borderless">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">Category</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for entry, edit_url in financial_status_data %}
+              <tr>
+                  <td>{{ entry.category }}</td>
+                  <td>${{ entry.amount }}</td>
+                  <td>
+                      <a href="{{ edit_url }}" class="btn btn-outline-warning btn-sm">Edit</a>
+                  </td>
+              </tr>
+              {% endfor %}
+              <tr>
+                <td colspan="3">
+                    <strong>Estimation for future months:</strong>
+                    <span class="text-muted">
+                        {% with current_month=now|date:"F" %}
+                            {% with next_month=now|date:"F"|date:"F" %}
+                                {% for amount in estimated_account_balance_list %}
+                                    {% if forloop.counter <= 2 %}
+                                        {{ next_month }} ${{ amount }} &nbsp;
+                                    {% endif %}
+                                {% endfor %}
+                            {% endwith %}
                         {% endwith %}
-                    {% endwith %}
-                </span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+                    </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          
+          <!-- Add Financial Status Form -->
+          <div class="mb-4">
+            <button id="toggleFinancialStatusForm" class="btn btn-minimalistic">+ Add Financial Status</button>
+            <div id="financialStatusFormWrapper" class="form-wrapper mt-3" style="display: none;">
+              <form method="post" action="{% url 'add_new_financial_status' %}">
+                {% csrf_token %}
+                {{ financial_status_form.as_p }}
+                <button type="submit" class="btn btn-primary btn-sm">Save</button>
+              </form>
+            </div>
+          </div>
+        </div>
 
-    <!-- Financial Status Form -->
-    <div class="mb-4">
-      <button id="toggleFinancialStatusForm" class="btn btn-minimalistic">+ Add Financial Status</button>
-      <div id="financialStatusFormWrapper" class="form-wrapper mt-3" style="display: none;">
-        <form method="post" action="{% url 'add_new_financial_status' %}">
-          {% csrf_token %}
-          {{ financial_status_form.as_p }}
-          <button type="submit" class="btn btn-primary btn-sm">Save</button>
-        </form>
+        <!-- Earnings Section -->
+        <div id="earningsSection" class="section" style="display: none;">
+          <h2 class="mb-4">Earnings</h2>
+          <table class="table table-borderless">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">Title</th>
+                <th scope="col">Category</th>
+                <th scope="col">Earnings per hour</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for entry in earning_source_data %}
+                <tr>
+                  <td>{{ entry.title }}</td>
+                  <td>{{ entry.category }}</td>
+                  <td>${{ entry.amount }}</td>
+                  <td>
+                    <form action="{% url 'delete_earning_source' entry.id %}" method="post">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
+                    </form>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          
+          <!-- Add New Earning Source Form -->
+          <div class="mb-4">
+            <button id="toggleEarningSourceForm" class="btn btn-minimalistic">+ Add New Earning Source</button>
+            <div id="earningSourceFormWrapper" class="form-wrapper mt-3" style="display: none;">
+              <form method="post" action="{% url 'add_new_earning_source' %}">
+                {% csrf_token %}
+                {{ earning_source_form.as_p }}
+                <button type="submit" class="btn btn-primary btn-sm">Save</button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Monthly Expenses Section -->
+        <div id="expensesSection" class="section" style="display: none;">
+          <h2 class="mb-4">Monthly Expenses</h2>
+          <table class="table table-borderless">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">Title</th>
+                <th scope="col">Category</th>
+                <th scope="col">Expense Amount</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for entry in expenses_data %}
+                <tr>
+                  <td>{{ entry.title }}</td>
+                  <td>{{ entry.category }}</td>
+                  <td>${{ entry.amount }}</td>
+                  <td>
+                    <form action="{% url 'delete_expense' entry.id %}" method="post">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
+                    </form>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          
+          <!-- Add New Expense Form -->
+          <div class="mb-4">
+            <button id="toggleExpensesForm" class="btn btn-minimalistic">+ Add New Expense</button>
+            <div id="expensesFormWrapper" class="form-wrapper mt-3" style="display: none;">
+              <form method="post" action="{% url 'add_new_expense' %}">
+                {% csrf_token %}
+                {{ expenses_form.as_p }}
+                <button type="submit" class="btn btn-primary btn-sm">Save</button>
+              </form>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-
-    <!-- Earnings Section -->
-    <h2 class="mb-4">Earnings</h2>
-    <div class="section">
-      <table class="table table-borderless">
-        <thead class="thead-light">
-          <tr>
-            <th scope="col">Title</th>
-            <th scope="col">Category</th>
-            <th scope="col">Earnings per hour</th>
-            <th scope="col">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for entry in earning_source_data %}
-            <tr>
-              <td>{{ entry.title }}</td>
-              <td>{{ entry.category }}</td>
-              <td>${{ entry.amount }}</td>
-              <td>
-                <form action="{% url 'delete_earning_source' entry.id %}" method="post">
-                  {% csrf_token %}
-                  <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
-                </form>
-              </td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Earning Source Form -->
-    <div class="mb-4">
-      <button id="toggleEarningSourceForm" class="btn btn-minimalistic">+ Add New Earning Source</button>
-      <div id="earningSourceFormWrapper" class="form-wrapper mt-3" style="display: none;">
-        <form method="post" action="{% url 'add_new_earning_source' %}">
-          {% csrf_token %}
-          {{ earning_source_form.as_p }}
-          <button type="submit" class="btn btn-primary btn-sm">Save</button>
-        </form>
-      </div>
-    </div>
-
-    <!-- Monthly Expenses Section -->
-    <h2 class="mb-4">Monthly Expenses</h2>
-    <div class="section">
-      <table class="table table-borderless">
-        <thead class="thead-light">
-          <tr>
-            <th scope="col">Title</th>
-            <th scope="col">Category</th>
-            <th scope="col">Expense Amount</th>
-            <th scope="col">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for entry in expenses_data %}
-            <tr>
-              <td>{{ entry.title }}</td>
-              <td>{{ entry.category }}</td>
-              <td>${{ entry.amount }}</td>
-              <td>
-                <form action="{% url 'delete_expense' entry.id %}" method="post">
-                  {% csrf_token %}
-                  <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
-                </form>
-              </td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Expenses Form -->
-    <div class="mb-4">
-      <button id="toggleExpensesForm" class="btn btn-minimalistic">+ Add New Expense</button>
-      <div id="expensesFormWrapper" class="form-wrapper mt-3" style="display: none;">
-        <form method="post" action="{% url 'add_new_expense' %}">
-          {% csrf_token %}
-          {{ expenses_form.as_p }}
-          <button type="submit" class="btn btn-primary btn-sm">Save</button>
-        </form>
-      </div>
-    </div>
-
   </div>
 
   <!-- Footer Section -->
@@ -148,93 +160,155 @@
   </footer>
 
   <style>
-    .header-section {
-        background-color: #f1f1f1;
-        border-bottom: 1px solid #ddd;
+    .container {
+      max-width: 1200px; /* Adjust as needed */
     }
 
-    .header-info h4 {
-        margin: 0;
+    .col-sidebar {
+      padding-left: 15px; /* Move sidebar slightly to the right */
     }
 
-    .btn-logout {
-        background-color: #dc3545;
-        color: #fff;
-        border: none;
-        padding: 8px 16px;
-        font-size: 14px;
-        cursor: pointer;
-        transition: background-color 0.2s ease;
+    .col-content {
+      padding-right: 15px; /* Align content properly */
     }
 
-    .btn-logout:hover {
-        background-color: #c82333;
+    .sidebar {
+      position: sticky;
+      top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      border: 1px solid rgba(0, 0, 0, 0.1); /* Subtle frame */
+      border-radius: 5px;
+      padding: 10px;
+      background-color: #fff;
     }
 
-    .footer-section {
-        background-color: #f1f1f1;
-        border-top: 1px solid #ddd;
+    .btn-sidebar {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 10px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .btn-sidebar:hover {
+      background-color: #f8f9fa;
     }
 
     .section {
-        background-color: #f9f9f9;
-        padding: 15px;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        margin-bottom: 20px;
+      background-color: #f9f9f9;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
     }
 
     .table-borderless th, .table-borderless td {
-        border: none;
+      border: none;
     }
 
     .btn-minimalistic {
-        background-color: transparent;
-        color: #007bff;
-        border: none;
-        padding: 5px 10px;
-        font-size: 14px;
-        cursor: pointer;
-        transition: color 0.2s ease, background-color 0.2s ease;
+      background-color: transparent;
+      color: #007bff;
+      border: none;
+      padding: 5px 10px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: color 0.2s ease, background-color 0.2s ease;
     }
 
     .btn-minimalistic:hover {
-        background-color: #f8f9fa;
-        color: #0056b3;
+      background-color: #f8f9fa;
+      color: #0056b3;
     }
 
     .btn-minimalistic:focus {
-        outline: none;
-        box-shadow: none;
+      outline: none;
+      box-shadow: none;
     }
 
     .btn-minimalistic:active {
-        background-color: #e2e6ea;
+      background-color: #e2e6ea;
     }
 
     .form-wrapper {
-        border-top: 1px solid #ddd;
-        padding-top: 15px;
+      border-top: 1px solid #ddd;
+      padding-top: 15px;
+    }
+
+    .form-group label {
+      font-weight: bold;
+    }
+
+    .form-group .optional {
+      font-size: 0.875rem;
+      color: #6c757d;
     }
   </style>
 
   <script>
-    // Toggle Financial Status Form
+    // Function to set section state in localStorage
+    function setSectionState(sectionId, isVisible) {
+      localStorage.setItem(sectionId, isVisible ? 'block' : 'none');
+    }
+
+    // Function to get section state from localStorage
+    function getSectionState(sectionId) {
+      return localStorage.getItem(sectionId) || 'none';
+    }
+
+    // Toggle section visibility and save state
+    function toggleSection(buttonId, sectionId) {
+      var section = document.getElementById(sectionId);
+      var isVisible = section.style.display === 'block';
+      section.style.display = isVisible ? 'none' : 'block';
+      setSectionState(sectionId, !isVisible);
+    }
+
+    // Set up event listeners with state management
+    document.getElementById("toggleAccountBalanceSection").addEventListener("click", function() {
+      toggleSection("toggleAccountBalanceSection", "accountBalanceSection");
+    });
+
+    document.getElementById("toggleEarningsSection").addEventListener("click", function() {
+      toggleSection("toggleEarningsSection", "earningsSection");
+    });
+
+    document.getElementById("toggleExpensesSection").addEventListener("click", function() {
+      toggleSection("toggleExpensesSection", "expensesSection");
+    });
+
     document.getElementById("toggleFinancialStatusForm").addEventListener("click", function() {
       var formWrapper = document.getElementById("financialStatusFormWrapper");
-      formWrapper.style.display = (formWrapper.style.display === "none") ? "block" : "none";
+      var isVisible = formWrapper.style.display === 'block';
+      formWrapper.style.display = isVisible ? 'none' : 'block';
+      setSectionState("financialStatusFormWrapper", !isVisible);
     });
 
-    // Toggle Earning Source Form
     document.getElementById("toggleEarningSourceForm").addEventListener("click", function() {
       var formWrapper = document.getElementById("earningSourceFormWrapper");
-      formWrapper.style.display = (formWrapper.style.display === "none") ? "block" : "none";
+      var isVisible = formWrapper.style.display === 'block';
+      formWrapper.style.display = isVisible ? 'none' : 'block';
+      setSectionState("earningSourceFormWrapper", !isVisible);
     });
 
-    // Toggle Expenses Form
     document.getElementById("toggleExpensesForm").addEventListener("click", function() {
       var formWrapper = document.getElementById("expensesFormWrapper");
-      formWrapper.style.display = (formWrapper.style.display === "none") ? "block" : "none";
+      var isVisible = formWrapper.style.display === 'block';
+      formWrapper.style.display = isVisible ? 'none' : 'block';
+      setSectionState("expensesFormWrapper", !isVisible);
+    });
+
+    // Restore section states on page load
+    document.addEventListener("DOMContentLoaded", function() {
+      document.getElementById("accountBalanceSection").style.display = getSectionState("accountBalanceSection");
+      document.getElementById("earningsSection").style.display = getSectionState("earningsSection");
+      document.getElementById("expensesSection").style.display = getSectionState("expensesSection");
+      document.getElementById("financialStatusFormWrapper").style.display = getSectionState("financialStatusFormWrapper");
+      document.getElementById("earningSourceFormWrapper").style.display = getSectionState("earningSourceFormWrapper");
+      document.getElementById("expensesFormWrapper").style.display = getSectionState("expensesFormWrapper");
     });
   </script>
 {% endblock %}
