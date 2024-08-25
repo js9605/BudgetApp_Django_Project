@@ -42,24 +42,24 @@ def delete_earning_source(request, pk):
     
     return redirect('dashboard')
 
-def generate_estimated_earnings_list(request,  earning_source_data):
+def generate_estimated_earnings_list(request,  earning_source_data, financial_status_total_amount):
     print("\n---generate_estimated_earnings_list---\n")
     list_of_earnings_per_month = []
     month_sum = 0
 
     earning_source_data_months = [1,2,3,4,5,6,7,8,9,10,11,12]
-    earning_source_data_amounts = [entry['amount']  for entry in earning_source_data]
+    earning_source_data_amount = [entry['amount']  for entry in earning_source_data]
     category = [entry['category']  for entry in earning_source_data]
     
     #TODO In amounts is where cash source is placed (check Fix estimated earnings in Obsydian)
-    if earning_source_data_amounts:
+    if earning_source_data_amount:
         for month in earning_source_data_months:
-            for amount in earning_source_data_amounts: #TODO Better name then amount/amounts
-                month_sum += amount * working_hours_per_month(request, month)
+            for income_source_amount_per_h in earning_source_data_amount:
+                month_sum += income_source_amount_per_h * working_hours_per_month(request, month) # earning amount from Sources of Income
 
-            list_of_earnings_per_month.append(month_sum)
+            list_of_earnings_per_month.append(month_sum + financial_status_total_amount) # here should append account balance not prev month
 
-        return list_of_earnings_per_month
+        return list_of_earnings_per_month #TODO Add expenses wyliczane z sredniej wydatkow co miesiac
     else:
         print("LOG: User amount list is empty")
         return redirect('dashboard')
