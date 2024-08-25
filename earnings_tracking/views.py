@@ -19,6 +19,7 @@ def add_new_earning_source(request):
 
             return redirect('dashboard')
         else:
+            print("DEBUG: Form errors:", form.errors)
             print("DEBUG: Form invalid for add_new_earning_source()")
 
     else:

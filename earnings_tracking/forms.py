@@ -5,6 +5,9 @@ class EarningsTrackingForm(forms.ModelForm):
     class Meta:
         model = EarningsTracking
         fields = ['title', 'description', 'category', 'amount', 'amount_type']  # Ensure 'amount_type' is included
+        widgets = {
+            'description': forms.Textarea(attrs={'rows': 2, 'placeholder': 'Optional description'}),
+        }
 
     labels = {
         'amount': 'Earnings per hour or month',  # Adjust label as needed
@@ -12,7 +15,7 @@ class EarningsTrackingForm(forms.ModelForm):
     }
 
     amount_type = forms.ChoiceField(
-        choices=[('hour', 'Per Hour'), ('month', 'Per Month')],
+        choices=[('hour', 'per Hour'), ('month', 'per Month')],
         widget=forms.RadioSelect,
         label="Amount Type"
     )
