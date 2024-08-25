@@ -10,11 +10,17 @@ from financial_status.models import Category
 User = get_user_model()
 class EarningsTracking(models.Model):
 
+    AMOUNT_TYPE_CHOICES = [
+        ('hour', 'Per Hour'),
+        ('month', 'Per Month'),
+    ]
+
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
     title = models.CharField(max_length=100, default="")
     description = models.TextField(default="") 
     category = models.ForeignKey(Category, on_delete=models.CASCADE, default=None, null=True)
-    amount = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00')) # earnings / h
+    amount = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00'))  # earnings amount
+    amount_type = models.CharField(max_length=10, choices=AMOUNT_TYPE_CHOICES, default='hour') #TODO earnings / h or month - zmień nazwę na vbardziej opisową 
 
     def __str__(self):
         return self.title

@@ -69,14 +69,15 @@
 
         <!-- Earnings Section -->
         <div id="earningsSection" class="section" style="display: none;">
-          <h2 class="mb-4">Earnings</h2>
+          <h2 class="mb-4">Monthly Earnings</h2>
           <table class="table table-borderless">
             <thead class="thead-light">
               <tr>
                 <th scope="col">Title</th>
                 <th scope="col">Category</th>
-                <th scope="col">Earnings per hour</th>
-                <th scope="col">Actions</th>
+                <th scope="col">#</th>
+                <th scope="col">Type</th>
+                <th scope="col"></th>
               </tr>
             </thead>
             <tbody>
@@ -85,6 +86,7 @@
                   <td>{{ entry.title }}</td>
                   <td>{{ entry.category }}</td>
                   <td>${{ entry.amount }}</td>
+                  <td>{{ entry.amount_type }}</td>
                   <td>
                     <form action="{% url 'delete_earning_source' entry.id %}" method="post">
                       {% csrf_token %}
@@ -96,18 +98,18 @@
             </tbody>
           </table>
           
-          <!-- Add New Earning Source Form -->
-          <div class="mb-4">
-            <button id="toggleEarningSourceForm" class="btn btn-minimalistic">+ Add New Earning Source</button>
-            <div id="earningSourceFormWrapper" class="form-wrapper mt-3" style="display: none;">
+        <!-- Add New Earning Source Form -->
+        <div class="mb-4">
+          <button id="toggleEarningSourceForm" class="btn btn-minimalistic">+ Add New Earning Source</button>
+          <div id="earningSourceFormWrapper" class="form-wrapper mt-3" style="display: none;">
               <form method="post" action="{% url 'add_new_earning_source' %}">
-                {% csrf_token %}
-                {{ earning_source_form.as_p }}
-                <button type="submit" class="btn btn-primary btn-sm">Save</button>
+                  {% csrf_token %}
+                  {{ earning_source_form.as_p }}  <!-- Consistent form rendering -->
+                  <button type="submit" class="btn btn-primary btn-sm">Save</button>
               </form>
-            </div>
           </div>
-        </div>
+      </div>
+    </div>
 
         <!-- Monthly Expenses Section -->
         <div id="expensesSection" class="section" style="display: none;">
@@ -153,11 +155,6 @@
       </div>
     </div>
   </div>
-
-  <!-- Footer Section -->
-  <footer class="footer-section text-center p-3 mt-5">
-    <p class="mb-0">&copy; Budget App 2024</p>
-  </footer>
 
   <style>
     .container {

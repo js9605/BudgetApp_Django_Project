@@ -55,13 +55,13 @@ class Dashboard(models.Model):
     def get_earning_sources(self):
         earning_sources = EarningsTracking.objects.filter()
         earning_source_data = [
-            {'id': earning_source.id, 'title': earning_source.title, 'category': earning_source.category, 'amount': earning_source.amount}
+            {'id': earning_source.id, 'title': earning_source.title, 'category': earning_source.category, 'amount': earning_source.amount, 'amount_type': earning_source.amount_type}
             for earning_source in earning_sources
         ]
 
         return earning_source_data
     
-    def get_expenses_sources(self):
+    def get_monthly_expenses_data(self):
         expenses_sources = ExpensesTracking.objects.filter()
         expenses_source_data = [
             {'id': expenses_source.id, 'title': expenses_source.title, 'category': expenses_source.category, 'amount': expenses_source.amount}
