@@ -37,11 +37,6 @@ def dashboard(request):
 
     estimated_account_balance_list = [Decimal(str(earning)) + financial_status_total_amount for earning in estimate_future_earnings]
 
-    # estimated_account_balance_list = [
-    #     Decimal(str(earning)) + financial_status_total_amount - sum(expense.amount for expense in expenses_data)
-    #     for earning in estimate_future_earnings
-    # ]
-
     # Pass everything to context
     context = {
         'estimated_account_balance_list': estimated_account_balance_list,
@@ -82,7 +77,7 @@ def apply_expenses(estimate_future_earnings, expenses_data):
     total_expenses = sum(expense['amount'] for expense in expenses_data)
 
     estimated_account_balance_list = [
-        earning - total_expenses for earning in estimate_future_earnings
+        earning - total_expenses * 2 for earning in estimate_future_earnings # *2 for current and future month estimation xD
     ]
 
     return estimated_account_balance_list

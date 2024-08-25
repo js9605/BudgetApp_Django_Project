@@ -54,7 +54,8 @@ def generate_estimated_earnings_list(request,  earning_source_data, financial_st
     if earning_source_data_amount:
         for month in earning_source_data_months:
             for income_source_amount_per_h in earning_source_data_amount:
-                month_sum = income_source_amount_per_h * working_hours_per_month(request, month) # earning amount from Sources of Income
+                working_hours_given_month = working_hours_per_month(request, month)
+                month_sum = income_source_amount_per_h * working_hours_given_month # earning amount from Sources of Income
 
             list_of_earnings_per_month.append(month_sum + financial_status_total_amount)
 
