@@ -40,7 +40,7 @@ class FinancialStatus(models.Model):
 @receiver(post_migrate)
 def create_initial_categories(sender, **kwargs):
     if sender.name == 'financial_status':
-        categories = ['Bank Accounts', 'Cash', 'Investments', 'Other']
+        categories = ['Bank Accounts', 'Cash', 'Other']
 
         for category_name in categories:
             Category.objects.get_or_create(name=category_name)

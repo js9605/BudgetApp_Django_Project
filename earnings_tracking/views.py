@@ -51,13 +51,12 @@ def generate_estimated_earnings_list(request,  earning_source_data, financial_st
     earning_source_data_amount = [entry['amount']  for entry in earning_source_data]
     category = [entry['category']  for entry in earning_source_data]
     
-    #TODO In amounts is where cash source is placed (check Fix estimated earnings in Obsydian)
     if earning_source_data_amount:
         for month in earning_source_data_months:
             for income_source_amount_per_h in earning_source_data_amount:
-                month_sum += income_source_amount_per_h * working_hours_per_month(request, month) # earning amount from Sources of Income
+                month_sum = income_source_amount_per_h * working_hours_per_month(request, month) # earning amount from Sources of Income
 
-            list_of_earnings_per_month.append(month_sum + financial_status_total_amount) # here should append account balance not prev month
+            list_of_earnings_per_month.append(month_sum + financial_status_total_amount)
 
         return list_of_earnings_per_month #TODO Add expenses wyliczane z sredniej wydatkow co miesiac
     else:

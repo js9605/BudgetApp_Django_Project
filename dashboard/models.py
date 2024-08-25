@@ -7,6 +7,8 @@ from django.db.models import Max
 from financial_status.models import FinancialStatus, Category
 from earnings_tracking.models import EarningsTracking
 
+from expenses_tracking.models import ExpensesTracking
+
 
 
 User = get_user_model()
@@ -58,3 +60,12 @@ class Dashboard(models.Model):
         ]
 
         return earning_source_data
+    
+    def get_expenses_sources(self):
+        expenses_sources = ExpensesTracking.objects.filter()
+        expenses_source_data = [
+            {'id': expenses_source.id, 'title': expenses_source.title, 'category': expenses_source.category, 'amount': expenses_source.amount}
+            for expenses_source in expenses_sources
+        ]
+
+        return expenses_source_data
