@@ -8,10 +8,11 @@ from datetime import datetime
 
 # from expenses_tracking.models import ExpensesTracking #TODO
 from financial_status.models import FinancialStatus
-from .forms import UserRegistrationForm
+from .forms import UserRegistrationForm, EditUserProfileForm, EarningsTrackingForm
 from .models import UserProfile
 from .forms import EditUserProfileForm
 from Utils.working_hours_calculator import working_hours_per_month
+from earnings_tracking.models import EarningsTracking
 
 
 @login_required
@@ -19,26 +20,33 @@ def user_profile(request):
     user = request.user
     profile, created = UserProfile.objects.get_or_create(user=user)
 
-    form = EditUserProfileForm(instance=profile)
+    # Initialize forms
+    profile_form = EditUserProfileForm(instance=profile)
+    earnings_form = EarningsTrackingForm()
 
-    # expenses = ExpensesTracking.objects.filter(author=user).all()
-    # earnings = EarningsTracking.objects.filer(author=user).all()
     financial_status = FinancialStatus.objects.filter(user=user).all()
-
     working_hours = working_hours_per_month(request, datetime.now().month)
 
     if request.method == 'POST':
-        form = EditUserProfileForm(request.POST, instance=profile)
-        if form.is_valid():
-            form.save()
-            return redirect('user_profile')
+        if 'save_profile' in request.POST:
+            profile_form = EditUserProfileForm(request.POST, instance=profile)
+            if profile_form.is_valid():
+                profile_form.save()
+                return redirect('user_profile')
+
+        elif 'save_earnings' in request.POST:
+            earnings_form = EarningsTrackingForm(request.POST)
+            if earnings_form.is_valid():
+                earnings_tracking = earnings_form.save(commit=False)
+                earnings_tracking.user = user
+                earnings_tracking.save()
+                return redirect('user_profile')
 
     context = {
-        # 'expenses':expenses,
-        # 'earnings':earnings,
         'working_hours': working_hours,
-        'form': form,
-        'financial_status':financial_status
+        'profile_form': profile_form,
+        'earnings_form': earnings_form,
+        'financial_status': financial_status
     }
 
     return render(request, 'accounts/profile_details.html', context)

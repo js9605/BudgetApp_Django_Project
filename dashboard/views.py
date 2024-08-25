@@ -29,11 +29,11 @@ def dashboard(request):
 
     # Expenses data and form
     expenses_form = ExpensesTrackingForm()
-    expenses_data = user_dashboard.get_expenses_sources() #TODO It should be clear that its monthly expenses!
+    monthly_expenses_data = user_dashboard.get_monthly_expenses_data() #TODO It should be clear that its monthly expenses!
 
     # Estimations, including expenses
     estimate_future_earnings = estimate_earnings(request, earning_source_data, financial_status_total_amount)
-    estimate_future_earnings = apply_expenses(estimate_future_earnings, expenses_data)
+    estimate_future_earnings = apply_expenses(estimate_future_earnings, monthly_expenses_data)
 
     estimated_account_balance_list = [Decimal(str(earning)) + financial_status_total_amount for earning in estimate_future_earnings]
 
@@ -47,7 +47,7 @@ def dashboard(request):
         'earning_source_data': earning_source_data,
         'earning_source_form': earning_source_form,
 
-        'expenses_data': expenses_data,
+        'expenses_data': monthly_expenses_data,
         'expenses_form': expenses_form,
     }
 
