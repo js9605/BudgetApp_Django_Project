@@ -9,11 +9,17 @@ from financial_status.models import Category
 
 User = get_user_model()
 class ExpensesTracking(models.Model):
+    # EXPENSE_TYPE_CHOICES = [
+    #     ('single', 'Single Payment'),
+    #     ('monthly', 'Monthly Recurring'),
+    # ]
+    
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
     title = models.CharField(max_length=100, default="")
     description = models.TextField(default="") 
     category = models.ForeignKey(Category, on_delete=models.CASCADE, default=None, null=True)
-    amount = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00'))  # expense amount
+    amount = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00'))
+    # expense_type = models.CharField(max_length=10, choices=EXPENSE_TYPE_CHOICES, default="single")
 
     def __str__(self):
         return self.title

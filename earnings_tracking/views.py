@@ -43,28 +43,28 @@ def delete_earning_source(request, pk):
     
     return redirect('dashboard')
 
-def generate_estimated_earnings_list(request,  earning_source_data, financial_status_total_amount):
+def generate_estimated_earnings_list(request,  earning_source_data):
     print("\n---generate_estimated_earnings_list---\n")
     list_of_earnings_per_month = []
 
     earning_source_data_months = [1,2,3,4,5,6,7,8,9,10,11,12]
-    category = [entry['category']  for entry in earning_source_data]
+    month_sum_per_hour = 0
+    month_sum_per_month = 0
 
     if earning_source_data:
         for month in earning_source_data_months:
-
-            month_sum_per_hour = 0
-            month_sum_per_month = 0
-
             for entry in earning_source_data:
-                    
+
                 if entry['amount_type'] == "hour":
                     working_hours_given_month = working_hours_per_month(request, month)
-                    month_sum_per_hour = month_sum_per_hour + entry['amount'] * working_hours_given_month
+                    month_sum_per_hour = entry['amount'] * working_hours_given_month
                 elif entry['amount_type'] == "month": 
-                    month_sum_per_month = month_sum_per_month + entry['amount']
+                    month_sum_per_month = entry['amount']
 
-            list_of_earnings_per_month.append(month_sum_per_hour + month_sum_per_month + financial_status_total_amount)
+            # if month != 1:
+                # list_of_earnings_per_month.append(month_sum_per_hour + month_sum_per_month + financial_status_total_amount + list_of_earnings_per_month[month - 2])
+            # else:
+            list_of_earnings_per_month.append(month_sum_per_hour + month_sum_per_month)
 
         return list_of_earnings_per_month #TODO Add expenses wyliczane z sredniej wydatkow co miesiac
 

@@ -13,6 +13,7 @@ def add_new_expense(request):
             expense = form.save(commit=False)
             expense.user = request.user
             expense.save()
+
             return redirect('dashboard')  # Redirect to your desired page after saving
     else:
         form = ExpensesTrackingForm()

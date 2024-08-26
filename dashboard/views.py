@@ -29,13 +29,12 @@ def dashboard(request):
 
     # Expenses data and form
     expenses_form = ExpensesTrackingForm()
-    monthly_expenses_data = user_dashboard.get_monthly_expenses_data() #TODO It should be clear that its monthly expenses!
+    monthly_expenses_data = user_dashboard.get_monthly_expenses_data()
 
     # Estimations, including expenses
-    estimate_future_earnings = estimate_earnings(request, earning_source_data, financial_status_total_amount)
-    estimate_future_earnings = apply_expenses(estimate_future_earnings, monthly_expenses_data)
-
-    estimated_account_balance_list = [Decimal(str(earning)) + financial_status_total_amount for earning in estimate_future_earnings]
+    estimated_future_earnings = estimate_earnings(request, earning_source_data)
+    estimated_future_earnings = apply_expenses(estimated_future_earnings, monthly_expenses_data)
+    estimated_account_balance_list = estimate_financial_statuses(estimated_future_earnings, financial_status_total_amount)
 
     # Pass everything to context
     context = {
@@ -56,9 +55,9 @@ def dashboard(request):
 def generate_urls(data: List[Dict[str, Any]], url_name):
     return [reverse(url_name, args=[entry['id']]) for entry in data]
 
-def estimate_earnings(request, earning_source_data, financial_status_total_amount):
+def estimate_earnings(request, earning_source_data):
     estimate_earnings_for_future_2_months = []
-    estimated_earnings_list = generate_estimated_earnings_list(request, earning_source_data, financial_status_total_amount) #TODO Add expenses wyliczane z sredniej wydatkow co miesiac
+    estimated_earnings_list = generate_estimated_earnings_list(request, earning_source_data)
 
     current_month_number = datetime.now().month
     estimate_earnings_for_future_2_months.append(estimated_earnings_list[current_month_number - 1])
@@ -73,11 +72,18 @@ def sum_current_financial_status(last_financial_status_data):
 
     return financial_status_total_amount
 
-def apply_expenses(estimate_future_earnings, expenses_data):
+def apply_expenses(estimated_future_earnings, expenses_data):
     total_expenses = sum(expense['amount'] for expense in expenses_data)
 
-    estimated_account_balance_list = [
-        earning - total_expenses * 2 for earning in estimate_future_earnings # *2 for current and future month estimation xD
-    ]
+    estimated_account_balance_list = [earning - total_expenses for earning in estimated_future_earnings] # *2 for current and future month estimation xD
+
+    return estimated_account_balance_list
+
+def estimate_financial_statuses(estimated_future_earnings, financial_status_total_amount):
+    estimated_account_balance_list = []
+    for earning in estimated_future_earnings:
+        account_balance_single_month = Decimal(str(earning)) + financial_status_total_amount
+        estimated_account_balance_list.append(account_balance_single_month)
+        financial_status_total_amount = account_balance_single_month
 
     return estimated_account_balance_list
