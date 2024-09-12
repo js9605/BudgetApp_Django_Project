@@ -6,27 +6,33 @@ from .forms import ExpensesTrackingForm  # Assuming you have a similar form for 
 from .models import ExpensesTracking  # Assuming you have a similar model for expenses
 
 
-def add_new_expense(request):
+def add_expense(request):
     if request.method == 'POST':
         form = ExpensesTrackingForm(request.POST)
+
         if form.is_valid():
             expense = form.save(commit=False)
             expense.user = request.user
+
             expense.save()
 
-            return redirect('dashboard')  # Redirect to your desired page after saving
+            return redirect('dashboard')
+        else:
+            print(form.errors)
+
     else:
         form = ExpensesTrackingForm()
-    
+
     context = {'form': form}
-    return render(request, 'expenses/add_expense.html', context)
+    return render(request, 'data_visualisation/dashboard.html', context)
 
 def delete_expense(request, pk):
     expense = get_object_or_404(ExpensesTracking, pk=pk)
     if request.method == 'POST':
         expense.delete()
         return redirect('dashboard')
-    return render(request, 'expenses/confirm_delete.html', {'expense': expense})
+    
+    return render(request, 'expenses/confirm_delete.html', {'expense': expense})#TODO Theres no confirm_delete.html
 
 def generate_estimated_expenses_list(request, expense_source_data, financial_status_total_amount):
     # TODO Calculate expenses here

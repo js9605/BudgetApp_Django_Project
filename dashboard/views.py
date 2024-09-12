@@ -22,7 +22,7 @@ def dashboard(request):
     last_financial_status_data = user_dashboard.get_latest_financial_status()
     edit_urls = generate_urls(last_financial_status_data, 'edit_financial_status')
     financial_status_total_amount = sum_current_financial_status(last_financial_status_data)
-
+ 
     # Earning source data and form
     earning_source_form = EarningsTrackingForm()
     earning_source_data = user_dashboard.get_earning_sources()
@@ -73,7 +73,11 @@ def sum_current_financial_status(last_financial_status_data):
     return financial_status_total_amount
 
 def apply_expenses(estimated_future_earnings, expenses_data):
-    total_expenses = sum(expense['amount'] for expense in expenses_data)
+    total_expenses = 0
+
+    for expense in expenses_data:
+        if expense['expense_type'] == "monthly": #TODO Im getting too much money in account balance because im not adding expenses because they have type = single
+            total_expenses += expense['amount']
 
     estimated_account_balance_list = [earning - total_expenses for earning in estimated_future_earnings] # *2 for current and future month estimation xD
 

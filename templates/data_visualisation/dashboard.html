@@ -7,13 +7,14 @@
       <div class="col-md-3 col-sidebar">
         <div class="sidebar">
           <button id="toggleAccountBalanceSection" class="btn btn-minimalistic btn-sidebar">Account Balance</button>
-          <button id="toggleEarningsSection" class="btn btn-minimalistic btn-sidebar">Earnings</button>
+          <button id="toggleEarningsSection" class="btn btn-minimalistic btn-sidebar">Monthly Earnings</button>
           <button id="toggleExpensesSection" class="btn btn-minimalistic btn-sidebar">Monthly Expenses</button>
         </div>
       </div>
 
       <!-- Main Content Area -->
       <div class="col-md-9 col-content">
+
         <!-- Account Balance Section -->
         <div id="accountBalanceSection" class="section" style="display: none;">
           <h2 class="mb-4">Account Balance</h2>
@@ -21,34 +22,34 @@
             <thead class="thead-light">
               <tr>
                 <th scope="col">Category</th>
-                <th scope="col">Amount</th>
+                <th scope="col">#</th>
                 <th scope="col">Actions</th>
               </tr>
             </thead>
             <tbody>
               {% for entry, edit_url in financial_status_data %}
               <tr>
-                  <td>{{ entry.category }}</td>
-                  <td>${{ entry.amount }}</td>
-                  <td>
-                      <a href="{{ edit_url }}" class="btn btn-outline-warning btn-sm">Edit</a>
-                  </td>
+                <td>{{ entry.category }}</td>
+                <td>${{ entry.amount }}</td>
+                <td>
+                  <a href="{{ edit_url }}" class="btn btn-outline-warning btn-sm">Edit</a>
+                </td>
               </tr>
               {% endfor %}
               <tr>
                 <td colspan="3">
-                    <strong>Estimation for future months:</strong>
-                    <span class="text-muted">
-                        {% with current_month=now|date:"F" %}
-                            {% with next_month=now|date:"F"|date:"F" %}
-                                {% for amount in estimated_account_balance_list %}
-                                    {% if forloop.counter <= 2 %}
-                                        {{ next_month }} ${{ amount }} &nbsp;
-                                    {% endif %}
-                                {% endfor %}
-                            {% endwith %}
-                        {% endwith %}
-                    </span>
+                  <strong>Estimation for future months:</strong>
+                  <span class="text-muted">
+                    {% with current_month=now|date:"F" %}
+                      {% with next_month=now|date:"F"|date:"F" %}
+                        {% for amount in estimated_account_balance_list %}
+                          {% if forloop.counter <= 2 %}
+                            {{ next_month }} ${{ amount }} &nbsp;
+                          {% endif %}
+                        {% endfor %}
+                      {% endwith %}
+                    {% endwith %}
+                  </span>
                 </td>
               </tr>
             </tbody>
@@ -141,7 +142,7 @@
               <tr>
                 <th scope="col">Title</th>
                 <th scope="col">Category</th>
-                <th scope="col">Expense Amount</th>
+                <th scope="col">#</th>
                 <th scope="col">Actions</th>
               </tr>
             </thead>
@@ -166,7 +167,7 @@
           <div class="mb-4">
             <button id="toggleExpensesForm" class="btn btn-minimalistic">+ Add New Expense</button>
             <div id="expensesFormWrapper" class="form-wrapper mt-3 form-container" style="display: none;">
-              <form method="post" action="{% url 'add_new_expense' %}">
+              <form method="post" action="{% url 'add_expense' %}">
                 {% csrf_token %}
                 <div class="form-group">
                   <label for="title">Title</label>
@@ -179,6 +180,11 @@
                 <div class="form-group">
                   <label for="amount">Amount</label>
                   {{ expenses_form.amount }}
+                </div>
+                <!-- Dropdown added here -->
+                <div class="form-group">
+                  <label for="expense_type">Type</label>
+                  {{ expenses_form.expense_type }}
                 </div>
                 <button type="submit" class="btn btn-primary btn-sm">Save</button>
               </form>

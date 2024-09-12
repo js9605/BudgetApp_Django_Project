@@ -2,16 +2,9 @@ from django import forms
 from .models import EarningsTracking
 
 class EarningsTrackingForm(forms.ModelForm):
-    class Meta:
-        model = EarningsTracking
-        fields = ['title', 'description', 'category', 'amount', 'amount_type']  # Ensure 'amount_type' is included
-        widgets = {
-            'description': forms.Textarea(attrs={'rows': 2, 'placeholder': 'Optional description'}),
-        }
-
     labels = {
-        'amount': 'Earnings per hour or month',  # Adjust label as needed
-        'amount_type': 'Amount Type',  # Label for amount_type
+        'amount': 'Earnings per hour or month',
+        'amount_type': 'Amount Type',
     }
 
     amount_type = forms.ChoiceField(
@@ -19,6 +12,12 @@ class EarningsTrackingForm(forms.ModelForm):
         widget=forms.RadioSelect,
         label="Amount Type"
     )
+    class Meta:
+        model = EarningsTracking
+        fields = ['title', 'description', 'category', 'amount', 'amount_type']  # Ensure 'amount_type' is included
+        widgets = {
+            'description': forms.Textarea(attrs={'rows': 2, 'placeholder': 'Optional description'}),
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
