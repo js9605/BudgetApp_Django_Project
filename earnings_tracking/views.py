@@ -61,9 +61,6 @@ def generate_estimated_earnings_list(request,  earning_source_data):
                 elif entry['amount_type'] == "month": 
                     month_sum_per_month = entry['amount']
 
-            # if month != 1:
-                # list_of_earnings_per_month.append(month_sum_per_hour + month_sum_per_month + financial_status_total_amount + list_of_earnings_per_month[month - 2])
-            # else:
             list_of_earnings_per_month.append(month_sum_per_hour + month_sum_per_month)
 
         return list_of_earnings_per_month #TODO Add expenses wyliczane z sredniej wydatkow co miesiac
