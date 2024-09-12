@@ -4,6 +4,8 @@ from django.urls import reverse
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from decimal import Decimal
+import plotly.express as px
+import plotly.io as pio
 
 from .models import Dashboard
 from financial_status.forms import FinancialStatusForm
@@ -32,22 +34,26 @@ def dashboard(request):
     monthly_expenses_data = user_dashboard.get_monthly_expenses_data()
 
     # Estimations, including expenses
-    estimated_future_earnings = estimate_earnings(request, earning_source_data)
+    estimated_future_earnings = estimate_earnings(request, earning_source_data, 5)
     estimated_future_earnings = apply_expenses(estimated_future_earnings, monthly_expenses_data)
     estimated_account_balance_list = estimate_financial_statuses(estimated_future_earnings, financial_status_total_amount)
 
-    # Pass everything to context
+    # Plots
+    graph = generate_plot_for_estimated_acc_balance(estimated_account_balance_list)
+
     context = {
         'estimated_account_balance_list': estimated_account_balance_list,
         'financial_status_data': zip(last_financial_status_data, edit_urls),
         'financial_status_form': financial_status_form,
-        'edit_mode': False,
+        'edit_mode': False, #TODO Why that? 
 
         'earning_source_data': earning_source_data,
         'earning_source_form': earning_source_form,
 
         'expenses_data': monthly_expenses_data,
         'expenses_form': expenses_form,
+
+        'graph': graph,
     }
 
     return render(request, 'data_visualisation/dashboard.html', context)
@@ -55,13 +61,19 @@ def dashboard(request):
 def generate_urls(data: List[Dict[str, Any]], url_name):
     return [reverse(url_name, args=[entry['id']]) for entry in data]
 
-def estimate_earnings(request, earning_source_data):
+def estimate_earnings(request, earning_source_data, how_many_months):
     estimate_earnings_for_future_2_months = []
     estimated_earnings_list = generate_estimated_earnings_list(request, earning_source_data)
 
     current_month_number = datetime.now().month
-    estimate_earnings_for_future_2_months.append(estimated_earnings_list[current_month_number - 1])
-    estimate_earnings_for_future_2_months.append(estimated_earnings_list[current_month_number])
+
+    for month in range(how_many_months):
+        month_idx = current_month_number + month - 1
+
+        if month_idx > 11:
+            break
+
+        estimate_earnings_for_future_2_months.append(estimated_earnings_list[month_idx])
 
     return estimate_earnings_for_future_2_months
 
@@ -91,3 +103,26 @@ def estimate_financial_statuses(estimated_future_earnings, financial_status_tota
         financial_status_total_amount = account_balance_single_month
 
     return estimated_account_balance_list
+
+def generate_plot_for_estimated_acc_balance(estimated_account_balance_list):
+    """
+    KEEP IT SIMPLE AT START!
+
+    Plot with whole year in months vs plot with future 6 months
+        If creating whole year plots what should be placed in past months? 
+    After creating plot get rid of Estimation for future months in Acccount Balance board
+
+    """
+
+    i = 0
+    current_month_number = datetime.now().month
+    months = []
+
+    for estimated_blance in estimated_account_balance_list:
+        months.append(current_month_number + i)
+        i = i + 1
+
+    fig = px.line(x=months, y=estimated_account_balance_list, title='Estimated Account Balance Over Time')
+    graph = pio.to_html(fig, full_html=False)
+
+    return graph
