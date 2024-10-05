@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='earningstracking',
             name='amount_type',
-            field=models.CharField(choices=[('hour', 'Per Hour'), ('month', 'Per Month')], default='hour', max_length=10),
+            field=models.CharField(choices=[('hour', 'Per Hour'), ('month', 'per month')], default='hour', max_length=10),
         ),
     ]

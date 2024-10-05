@@ -61,7 +61,7 @@ class Dashboard(models.Model):
 
         return earning_source_data
     
-    def get_monthly_expenses_data(self):
+    def get_expenses_data(self):
         expenses_sources = ExpensesTracking.objects.filter()
         expenses_source_data = [
             {'id': expenses_source.id, 'title': expenses_source.title, 'category': expenses_source.category, 'amount': expenses_source.amount, 'expense_type': expenses_source.expense_type}

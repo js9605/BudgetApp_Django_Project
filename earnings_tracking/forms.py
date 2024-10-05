@@ -8,7 +8,7 @@ class EarningsTrackingForm(forms.ModelForm):
     }
 
     amount_type = forms.ChoiceField(
-        choices=[('hour', 'per Hour'), ('month', 'per Month')],
+        choices=[('single', 'single earning'), ('month', 'per month')],
         widget=forms.RadioSelect,
         label="Amount Type"
     )
