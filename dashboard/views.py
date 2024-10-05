@@ -31,11 +31,15 @@ def dashboard(request):
 
     # Expenses data and form
     expenses_form = ExpensesTrackingForm()
-    monthly_expenses_data = user_dashboard.get_monthly_expenses_data()
+    expenses_data = user_dashboard.get_expenses_data()
+
+    #Apply single earning and expense here
+    last_financial_status_data = update_financial_status_with_single_earning(last_financial_status_data, earning_source_data)
+    last_financial_status_data = update_financial_status_with_single_expense(last_financial_status_data, expenses_data)
 
     # Estimations, including expenses
     estimated_future_earnings = estimate_earnings(request, earning_source_data, 5)
-    estimated_future_earnings = apply_expenses(estimated_future_earnings, monthly_expenses_data)
+    estimated_future_earnings = apply_expenses_for_estimated_acc_balance(estimated_future_earnings, expenses_data)
     estimated_account_balance_list = estimate_financial_statuses(estimated_future_earnings, financial_status_total_amount)
 
     # Plots
@@ -50,7 +54,7 @@ def dashboard(request):
         'earning_source_data': earning_source_data,
         'earning_source_form': earning_source_form,
 
-        'expenses_data': monthly_expenses_data,
+        'expenses_data': expenses_data,
         'expenses_form': expenses_form,
 
         'graph': graph,
@@ -84,7 +88,35 @@ def sum_current_financial_status(last_financial_status_data):
 
     return financial_status_total_amount
 
-def apply_expenses(estimated_future_earnings, expenses_data):
+def update_financial_status_with_single_earning(last_financial_status_data, earning_source_data):
+    try:
+        for earning in earning_source_data:
+            if earning['amount_type'] == 'single':
+                for i in range(len(last_financial_status_data)):
+                    if last_financial_status_data[i]['category'] == earning['category'].name:
+                        last_financial_status_data[i]['amount'] += earning['amount']
+                       
+        return last_financial_status_data
+    
+    except Exception as e:
+        print(f"Exception occured in update_financial_status_with_single_earning: {e}")
+        return last_financial_status_data
+
+def update_financial_status_with_single_expense(last_financial_status_data, expenses_source_data):
+    try:
+        for expense in expenses_source_data:
+            if expense['expense_type'] == 'single':
+                for i in range(len(last_financial_status_data)):
+                    if last_financial_status_data[i]['category'] == expense['category'].name:
+                        last_financial_status_data[i]['amount'] -= expense['amount']
+
+        return last_financial_status_data
+
+    except Exception as e:
+        print(f"Exception occured in update_financial_status_with_single_expense: {e}")
+        return last_financial_status_data
+
+def apply_expenses_for_estimated_acc_balance(estimated_future_earnings, expenses_data):
     total_expenses = 0
 
     for expense in expenses_data:

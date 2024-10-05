@@ -54,10 +54,11 @@ def generate_estimated_earnings_list(request,  earning_source_data):
     if earning_source_data:
         for month in earning_source_data_months:
             for entry in earning_source_data:
-
-                if entry['amount_type'] == "hour":
+                                
+                if entry['amount_type'] == "hour": # Obsolete
                     working_hours_given_month = working_hours_per_month(request, month)
                     month_sum_per_hour = entry['amount'] * working_hours_given_month
+                
                 elif entry['amount_type'] == "month": 
                     month_sum_per_month = entry['amount']
 
