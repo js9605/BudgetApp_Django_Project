@@ -1,9 +1,9 @@
 from django.shortcuts import render
-
-# Create your views here.
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import ExpensesTrackingForm  # Assuming you have a similar form for expenses
-from .models import ExpensesTracking  # Assuming you have a similar model for expenses
+
+from .forms import ExpensesTrackingForm
+from .models import ExpensesTracking
+from financial_status.models import FinancialStatus, Category
 
 
 def add_expense(request):
@@ -11,10 +11,17 @@ def add_expense(request):
         form = ExpensesTrackingForm(request.POST)
 
         if form.is_valid():
+            expense_amount = form.cleaned_data['amount']
+            expense_amount_type = form.cleaned_data['expense_type']
+            expense_category = form.cleaned_data['category']
+
+
             expense = form.save(commit=False)
             expense.user = request.user
 
             expense.save()
+
+            update_financial_status_with_single_excpense(request.user, expense_amount, expense_amount_type, expense_category)
 
             return redirect('dashboard')
         else:
@@ -25,6 +32,24 @@ def add_expense(request):
 
     context = {'form': form}
     return render(request, 'data_visualisation/dashboard.html', context)
+
+def update_financial_status_with_single_excpense(user, expense_amount, expense_amount_type, expense_category):
+    try:
+        categories = Category.objects.all()
+
+        for category in categories:
+            category_instance = Category.objects.get(name=category.name)
+            financial_status = FinancialStatus.objects.get(user=user, category=category_instance)
+
+            if str(category) == str(expense_category.name) and str(expense_amount_type) == "single": #TODO Hard typed type!!
+                financial_status.amount -= expense_amount 
+                financial_status.save()
+
+                print(financial_status)
+                print(financial_status.amount)
+    
+    except Exception as e:
+        print(f"Exception occured in update_financial_status_with_single_earning: {e}")
 
 def delete_expense(request, pk):
     expense = get_object_or_404(ExpensesTracking, pk=pk)

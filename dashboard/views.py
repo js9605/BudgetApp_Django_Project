@@ -94,22 +94,6 @@ def sum_current_financial_status(last_financial_status_data):
 
     return financial_status_total_amount
 
-# TODO GET RID OF THIS
-def update_financial_status_with_single_expense(last_financial_status_data, expenses_source_data):
-    try:
-        for expense in expenses_source_data:
-            if expense['expense_type'] == 'single':
-                for i in range(len(last_financial_status_data)):
-                    if last_financial_status_data[i]['category'] == expense['category'].name:
-                        last_financial_status_data[i]['amount'] -= expense['amount']
-                        last_financial_status_data.save()
-
-        return last_financial_status_data
-
-    except Exception as e:
-        print(f"Exception occured in update_financial_status_with_single_expense: {e}")
-        return last_financial_status_data
-
 def apply_expenses_for_estimated_acc_balance(estimated_future_earnings, expenses_data):
     total_expenses = 0
 
