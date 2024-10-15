@@ -8,6 +8,7 @@ import plotly.express as px
 import plotly.io as pio
 
 from .models import Dashboard
+from financial_status.models import FinancialStatus, Category
 from financial_status.forms import FinancialStatusForm
 from earnings_tracking.forms import EarningsTrackingForm
 from earnings_tracking.views import generate_estimated_earnings_list
@@ -33,10 +34,6 @@ def dashboard(request):
     expenses_form = ExpensesTrackingForm()
     expenses_data = user_dashboard.get_expenses_data()
 
-    #Apply single earning and expense here
-    last_financial_status_data = update_financial_status_with_single_earning(last_financial_status_data, earning_source_data)
-    last_financial_status_data = update_financial_status_with_single_expense(last_financial_status_data, expenses_data)
-
     # Estimations, including expenses
     estimated_future_earnings = estimate_earnings(request, earning_source_data, 5)
     estimated_future_earnings = apply_expenses_for_estimated_acc_balance(estimated_future_earnings, expenses_data)
@@ -44,6 +41,14 @@ def dashboard(request):
 
     # Plots
     graph = generate_plot_for_estimated_acc_balance(estimated_account_balance_list)
+    
+    """ TODO
+    Data from context should be extracted directly from db and not some temp variable e.g. last_financial_status_data
+    Add function extracting data from db before context
+    Rozważ jakie wartości w db powinny być updatowane w trakcie powyższych kalkulacji
+        - financial status  
+    """
+    #TODO Get context values directly from db 
 
     context = {
         'estimated_account_balance_list': estimated_account_balance_list,
@@ -61,6 +66,7 @@ def dashboard(request):
     }
 
     return render(request, 'data_visualisation/dashboard.html', context)
+
 
 def generate_urls(data: List[Dict[str, Any]], url_name):
     return [reverse(url_name, args=[entry['id']]) for entry in data]
@@ -88,20 +94,7 @@ def sum_current_financial_status(last_financial_status_data):
 
     return financial_status_total_amount
 
-def update_financial_status_with_single_earning(last_financial_status_data, earning_source_data):
-    try:
-        for earning in earning_source_data:
-            if earning['amount_type'] == 'single':
-                for i in range(len(last_financial_status_data)):
-                    if last_financial_status_data[i]['category'] == earning['category'].name:
-                        last_financial_status_data[i]['amount'] += earning['amount']
-                       
-        return last_financial_status_data
-    
-    except Exception as e:
-        print(f"Exception occured in update_financial_status_with_single_earning: {e}")
-        return last_financial_status_data
-
+# TODO GET RID OF THIS
 def update_financial_status_with_single_expense(last_financial_status_data, expenses_source_data):
     try:
         for expense in expenses_source_data:
@@ -109,6 +102,7 @@ def update_financial_status_with_single_expense(last_financial_status_data, expe
                 for i in range(len(last_financial_status_data)):
                     if last_financial_status_data[i]['category'] == expense['category'].name:
                         last_financial_status_data[i]['amount'] -= expense['amount']
+                        last_financial_status_data.save()
 
         return last_financial_status_data
 
